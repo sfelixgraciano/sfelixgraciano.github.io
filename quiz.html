@@ -1,96 +1,285 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulado de Inteligência Artificial</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; line-height: 1.6; }
-        .quiz-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #333; }
-        .question { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .options { list-style: none; padding: 0; }
-        .options li { margin: 10px 0; }
-        button { display: block; width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; }
-        button:hover { background: #218838; }
-        #result { margin-top: 20px; font-weight: bold; text-align: center; font-size: 20px; display: none; }
-        .correct { color: #28a745; font-weight: bold; }
-        .wrong { color: #dc3545; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado IA</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --azul: #0f172a;
+    --azul2: #1e3a8a;
+    --laranja: #f97316;
+    --verde: #22c55e;
+    --vermelho: #ef4444;
+    --card: #1e293b;
+    --text: #e2e8f0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, var(--azul), var(--azul2));
+    color: var(--text);
+    padding: 20px;
+}
+
+.quiz-container {
+    max-width: 900px;
+    margin: auto;
+    background: #020617;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+h1 {
+    font-family: 'Orbitron';
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.question {
+    background: var(--card);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+.question:hover {
+    transform: scale(1.01);
+}
+
+.options li {
+    list-style: none;
+    margin: 8px 0;
+}
+
+label {
+    display: block;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+input[type="radio"] {
+    margin-right: 8px;
+}
+
+label:hover {
+    background: rgba(249,115,22,0.2);
+}
+
+.correct {
+    background: rgba(34,197,94,0.3);
+    border-left: 4px solid var(--verde);
+}
+
+.wrong {
+    background: rgba(239,68,68,0.3);
+    border-left: 4px solid var(--vermelho);
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background: linear-gradient(90deg, var(--laranja), #fb923c);
+    color: white;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.02);
+}
+
+#result {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 22px;
+}
+
+#summary {
+    margin-top: 20px;
+    padding: 15px;
+    background: #020617;
+    border-radius: 10px;
+    display: none;
+    animation: fadeIn 1s ease;
+}
+
+.fade {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+</style>
 </head>
+
 <body>
 
 <div class="quiz-container">
     <h1>Simulado: Ecossistema de IA</h1>
-    <form id="quiz-form">
-        <div id="questions"></div>
-        <button type="button" onclick="calculateResult()">Finalizar Simulado</button>
-    </form>
+    <div id="questions"></div>
+    <button onclick="calculateResult()">Finalizar</button>
     <div id="result"></div>
+    <div id="summary"></div>
 </div>
 
 <script>
-    const questionsData = [
-        { q: "Qual a definição mais completa de 'modelo' em IA?", options: ["Algoritmo não treinado", "Artefato computacional treinado com parâmetros aprendidos", "Regras fixas manuais", "Banco de dados de treino"], correct: 1 },
-        { q: "Qual a relação entre dataset e modelo?", options: ["O modelo gera o dataset", "Dataset e modelo são a mesma coisa", "O dataset fornece exemplos para o modelo aprender padrões", "O dataset executa previsões"], correct: 2 },
-        { q: "Qual a função essencial do dataset no machine learning?", options: ["Base empírica para aprendizado de padrões", "Definir a arquitetura", "Executar o modelo em produção", "Armazenar resultados finais"], correct: 0 },
-        { q: "O que significa 'generalizar' para um modelo?", options: ["Memorizar o treino", "Executar mais rápido", "Produzir boas previsões para dados novos", "Reduzir o dataset"], correct: 2 },
-        { q: "O que é o Hugging Face?", options: ["Hardware de treino", "Repositório e hub colaborativo de modelos e datasets", "Linguagem de programação", "Sistema operacional"], correct: 1 },
-        { q: "No Hugging Face, o que são os 'Spaces'?", options: ["Apps e demos interativos", "Apenas datasets", "Cadeias de blocos", "Servidores de hardware"], correct: 0 },
-        { q: "No Hugging Face, o que representa o componente 'Models'?", options: ["Modelos pré-treinados prontos para uso", "Documentação técnica apenas", "Scripts de limpeza de dados", "Vendas de GPU"], correct: 0 },
-        { q: "Por que desenvolvedores usam o Hugging Face?", options: ["Para minerar cripto", "Para evitar o uso de IA", "Para acessar modelos prontos e acelerar o desenvolvimento", "Para criar hardware"], correct: 2 },
-        { q: "O que caracteriza a 'IA Física'?", options: ["IA em ambientes virtuais", "IA aplicada a robôs que interagem com o mundo real", "Simulações matemáticas sem prática", "Softwares de física básica"], correct: 1 },
-        { q: "Qual o papel de empresas como OpenAI, Anthropic e Google?", options: ["Desenvolver modelos avançados, pesquisa e aplicações", "Apenas vender hardware", "Atuar apenas como ISPs", "Criar apenas datasets"], correct: 0 },
-        { q: "Qual a importância do Big Data para a IA?", options: ["Elimina o treinamento", "Volumes massivos permitem melhor aprendizado e generalização", "Substitui algoritmos", "Reduz a complexidade"], correct: 1 },
-        { q: "Qual a proposta principal do Ollama?", options: ["Treinar na nuvem", "Criar datasets automáticos", "Executar modelos de linguagem localmente", "Substituir CPUs por papel"], correct: 2 },
-        { q: "O que é 'inferência'?", options: ["Treinar o modelo do zero", "Processo de usar um modelo treinado para gerar respostas", "Limpar o dataset", "Baixar o software"], correct: 1 },
-        { q: "O que o Ollama gerencia durante a execução?", options: ["Recursos de CPU, GPU e memória", "Apenas a internet", "A criação de novos algoritmos", "A folha de pagamento"], correct: 0 },
-        { q: "O que é o LLaMA?", options: ["Uma marca de hardware", "Uma família de modelos de linguagem (o cérebro)", "Um tipo de dataset bruto", "Uma plataforma de nuvem"], correct: 1 },
-        { q: "De onde geralmente vem o modelo em um fluxo de IA local?", options: ["Hugging Face", "Pendrive", "Apenas do Windows", "Google Drive pessoal"], correct: 0 },
-        { q: "Qual a diferença entre Cloud e Local (Ollama)?", options: ["Não há diferença", "Cloud é para treino/escala; Local é para inferência prática", "Local é mais lento em tudo", "Cloud é gratuita sempre"], correct: 1 },
-        { q: "Como o Ollama é tecnicamente descrito?", options: ["Banco de dados", "Software de inferência / runtime local", "Sistema de Big Data", "Rede social"], correct: 1 },
-        { q: "O que alimenta modelos como LLaMA durante o treino?", options: ["Energia solar apenas", "Datasets massivos (Big Data)", "Um único arquivo de texto", "Planilhas manuais"], correct: 1 },
-        { q: "Como sua aplicação consome o modelo no Ollama?", options: ["Via API", "Copiando o código manualmente", "Por telefone", "Enviando um e-mail"], correct: 0 }
-    ];
+const questionsData = [
 
-    const questionsContainer = document.getElementById('questions');
+/* FUNDAMENTOS */
+{q:"O que define um modelo de IA?",options:["Dados brutos","Artefato treinado","Banco de dados","Hardware"],correct:1,topic:"Fundamentos IA"},
+{q:"Inferência significa:",options:["Treinar modelo","Usar modelo","Limpar dados","Salvar modelo"],correct:1,topic:"Fundamentos IA"},
+{q:"Generalização é:",options:["Memorizar","Prever novos dados","Executar rápido","Reduzir dados"],correct:1,topic:"Fundamentos IA"},
+{q:"Machine Learning é:",options:["Programação manual","Aprendizado por dados","Banco de dados","Rede física"],correct:1,topic:"Fundamentos IA"},
+{q:"Overfitting ocorre quando:",options:["Generaliza bem","Memoriza treino","Erro baixo","Poucos dados"],correct:1,topic:"Fundamentos IA"},
+{q:"Underfitting ocorre quando:",options:["Modelo simples demais","Memória alta","Dados grandes","GPU lenta"],correct:0,topic:"Fundamentos IA"},
 
-    questionsData.forEach((item, index) => {
-        const qDiv = document.createElement('div');
-        qDiv.className = 'question';
-        qDiv.innerHTML = `<p><strong>${index + 1}. ${item.q}</strong></p>`;
-        
-        const optionsList = document.createElement('ul');
-        optionsList.className = 'options';
-        
-        item.options.forEach((opt, optIndex) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <label>
-                    <input type="radio" name="q${index}" value="${optIndex}">
-                    ${opt}
-                </label>
-            `;
-            optionsList.appendChild(li);
-        });
-        
-        qDiv.appendChild(optionsList);
-        questionsContainer.appendChild(qDiv);
+/* MODELOS */
+{q:"Modelo encapsula:",options:["Dados crus","Parâmetros aprendidos","Hardware","Scripts"],correct:1,topic:"Modelos"},
+{q:"Modelo supervisionado usa:",options:["Dados sem rótulo","Dados rotulados","Hardware","APIs"],correct:1,topic:"Modelos"},
+{q:"Rede neural é:",options:["Banco de dados","Modelo inspirado no cérebro","Servidor","Dataset"],correct:1,topic:"Modelos"},
+{q:"LLM significa:",options:["Large Language Model","Local Logic Machine","Linear Model","Low Memory"],correct:0,topic:"Modelos"},
+{q:"Exemplo de modelo:",options:["LLaMA","Linux","MySQL","HTML"],correct:0,topic:"Modelos"},
+{q:"Treinamento resulta em:",options:["Dataset","Modelo","API","Interface"],correct:1,topic:"Modelos"},
+
+/* DATASETS */
+{q:"Dataset é:",options:["Modelo","Dados para treino","Hardware","Algoritmo"],correct:1,topic:"Datasets"},
+{q:"Dataset supervisionado possui:",options:["Rótulos","APIs","Modelos","Logs"],correct:0,topic:"Datasets"},
+{q:"Qualidade do dataset impacta:",options:["Nada","Performance do modelo","Hardware","Cloud"],correct:1,topic:"Datasets"},
+{q:"Dataset grande permite:",options:["Pior modelo","Melhor generalização","Erro fixo","Treino rápido sempre"],correct:1,topic:"Datasets"},
+{q:"Dataset de teste serve para:",options:["Treinar","Avaliar","Salvar","Executar"],correct:1,topic:"Datasets"},
+{q:"Feature é:",options:["Variável de entrada","Modelo","API","Hardware"],correct:0,topic:"Datasets"},
+
+/* BIG DATA */
+{q:"Big Data refere-se a:",options:["Poucos dados","Grandes volumes","Hardware","APIs"],correct:1,topic:"Big Data"},
+{q:"Big Data ajuda IA porque:",options:["Remove treino","Melhora aprendizado","Substitui modelo","Reduz dados"],correct:1,topic:"Big Data"},
+{q:"Volume, variedade e velocidade são:",options:["3Vs","APIs","Modelos","Datasets"],correct:0,topic:"Big Data"},
+{q:"Sem Big Data:",options:["IA melhora","IA limita aprendizado","Nada muda","Cloud quebra"],correct:1,topic:"Big Data"},
+{q:"Exemplo Big Data:",options:["Logs massivos","Arquivo txt","Planilha pequena","Manual"],correct:0,topic:"Big Data"},
+{q:"Pipeline de dados inclui:",options:["Coleta e limpeza","Somente treino","Somente deploy","Nada"],correct:0,topic:"Big Data"},
+
+/* CLOUD */
+{q:"Cloud permite:",options:["Escala","Nada","Local apenas","Offline"],correct:0,topic:"Cloud"},
+{q:"Treinamento ocorre mais em:",options:["Cloud","Local leve","Mobile","Browser"],correct:0,topic:"Cloud"},
+{q:"Cloud vs local:",options:["Igual","Cloud escala","Local escala mais","Nada"],correct:1,topic:"Cloud"},
+{q:"GPU é usada para:",options:["Treino","Texto","Banco","Rede"],correct:0,topic:"Cloud"},
+{q:"Cloud oferece:",options:["Infraestrutura","Dataset","Modelo apenas","Nada"],correct:0,topic:"Cloud"},
+{q:"Exemplo cloud:",options:["AWS","Excel","HTML","Linux"],correct:0,topic:"Cloud"},
+
+/* FERRAMENTAS DE IA */
+{q:"Hugging Face é:",options:["Hardware","Hub IA","SO","Banco"],correct:1,topic:"Ferramentas de IA"},
+{q:"HF Models:",options:["Modelos","Dados","CPU","Rede"],correct:0,topic:"Ferramentas de IA"},
+{q:"HF Datasets:",options:["Dados","Modelos","GPU","Apps"],correct:0,topic:"Ferramentas de IA"},
+{q:"HF Spaces:",options:["Apps","Banco","Cloud","Dataset"],correct:0,topic:"Ferramentas de IA"},
+{q:"Ollama serve para:",options:["Treinar","Rodar local","Cloud","Dataset"],correct:1,topic:"Ferramentas de IA"},
+{q:"Ollama é:",options:["Runtime","Dataset","Banco","Cloud"],correct:0,topic:"Ferramentas de IA"},
+{q:"Ferramentas aceleram:",options:["Dev IA","Erro","Hardware","Nada"],correct:0,topic:"Ferramentas de IA"},
+
+/* ECOSSISTEMA */
+{q:"OpenAI faz:",options:["Modelos","Hardware","Rede","Banco"],correct:0,topic:"Ecossistema"},
+{q:"Anthropic faz:",options:["IA","Rede","Cloud","Banco"],correct:0,topic:"Ecossistema"},
+{q:"Google IA atua em:",options:["Pesquisa","Banco","CPU","Rede"],correct:0,topic:"Ecossistema"},
+{q:"Ecossistema IA inclui:",options:["Modelos e dados","Só hardware","Só cloud","Nada"],correct:0,topic:"Ecossistema"},
+{q:"Empresas IA criam:",options:["Modelos","Datasets apenas","Redes","Nada"],correct:0,topic:"Ecossistema"},
+{q:"IA moderna depende de:",options:["Dados e modelos","Planilhas","Manual","Nada"],correct:0,topic:"Ecossistema"},
+
+/* APLICAÇÕES */
+{q:"IA física:",options:["Robôs","Texto","Banco","API"],correct:0,topic:"Aplicações"},
+{q:"Chatbot usa:",options:["LLM","Planilha","Banco","Rede"],correct:0,topic:"Aplicações"},
+{q:"Visão computacional:",options:["Imagens","Texto","Som","Banco"],correct:0,topic:"Aplicações"},
+{q:"IA generativa:",options:["Cria conteúdo","Apaga dados","Só analisa","Nada"],correct:0,topic:"Aplicações"},
+{q:"Uso IA empresas:",options:["Automação","Nada","Manual","Offline"],correct:0,topic:"Aplicações"},
+{q:"IA aplicada resolve:",options:["Problemas reais","Nada","Só teoria","Só treino"],correct:0,topic:"Aplicações"}
+
+];
+
+const container = document.getElementById('questions');
+
+questionsData.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='question fade';
+    div.innerHTML=`<p><b>${i+1}. ${q.q}</b></p>`;
+    
+    q.options.forEach((opt,j)=>{
+        div.innerHTML+=`
+        <label>
+            <input type="radio" name="q${i}" value="${j}">
+            ${opt}
+        </label>`;
+    });
+    
+    container.appendChild(div);
+});
+
+document.addEventListener('change',e=>{
+    if(e.target.type==="radio"){
+        const labels=e.target.closest('.question').querySelectorAll('label');
+        labels.forEach(l=>l.style.background="");
+        e.target.parentElement.style.background="rgba(249,115,22,0.3)";
+    }
+});
+
+function calculateResult(){
+    let score=0;
+    let topicStats={};
+
+    document.querySelectorAll('.question').forEach((div,i)=>{
+        const q=questionsData[i];
+        const selected=div.querySelector('input:checked');
+
+        if(!topicStats[q.topic]) topicStats[q.topic]={correct:0,total:0};
+        topicStats[q.topic].total++;
+
+        if(selected){
+            if(parseInt(selected.value)===q.correct){
+                score++;
+                topicStats[q.topic].correct++;
+                selected.parentElement.classList.add('correct');
+            } else {
+                selected.parentElement.classList.add('wrong');
+                div.querySelectorAll('input')[q.correct].parentElement.classList.add('correct');
+            }
+        }
     });
 
-    function calculateResult() {
-        let score = 0;
-        questionsData.forEach((item, index) => {
-            const selected = document.querySelector(`input[name="q${index}"]:checked`);
-            if (selected && parseInt(selected.value) === item.correct) {
-                score++;
-            }
-        });
-        const resultDiv = document.getElementById('result');
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML = `Você acertou ${score} de ${questionsData.length} questões!`;
-        window.scrollTo(0, document.body.scrollHeight);
-    }
+    document.getElementById('result').innerHTML=`Você acertou ${score}/${questionsData.length}`;
+
+    generateSummary(topicStats);
+}
+
+function generateSummary(stats){
+    let summary="<h3>Resumo de estudo</h3>";
+
+    let sorted=Object.entries(stats).sort((a,b)=>{
+        return (a[1].correct/a[1].total)-(b[1].correct/b[1].total);
+    });
+
+    summary+="<p><b>Pontos a reforçar:</b></p><ul>";
+    sorted.slice(0,3).forEach(([topic,data])=>{
+        summary+=`<li>${topic}</li>`;
+    });
+    summary+="</ul>";
+
+    summary+="<p><b>Pontos fortes:</b></p><ul>";
+    sorted.slice(-3).forEach(([topic,data])=>{
+        summary+=`<li>${topic}</li>`;
+    });
+    summary+="</ul>";
+
+    document.getElementById('summary').innerHTML=summary;
+    document.getElementById('summary').style.display="block";
+}
 </script>
 
 </body>
