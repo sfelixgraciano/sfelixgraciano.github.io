@@ -138,69 +138,310 @@ button:hover {
 const questionsData = [
 
 /* FUNDAMENTOS */
-{q:"O que define um modelo de IA?",options:["Dados brutos","Artefato treinado","Banco de dados","Hardware"],correct:1,topic:"Fundamentos IA"},
-{q:"Inferência significa:",options:["Treinar modelo","Usar modelo","Limpar dados","Salvar modelo"],correct:1,topic:"Fundamentos IA"},
-{q:"Generalização é:",options:["Memorizar","Prever novos dados","Executar rápido","Reduzir dados"],correct:1,topic:"Fundamentos IA"},
-{q:"Machine Learning é:",options:["Programação manual","Aprendizado por dados","Banco de dados","Rede física"],correct:1,topic:"Fundamentos IA"},
-{q:"Overfitting ocorre quando:",options:["Generaliza bem","Memoriza treino","Erro baixo","Poucos dados"],correct:1,topic:"Fundamentos IA"},
-{q:"Underfitting ocorre quando:",options:["Modelo simples demais","Memória alta","Dados grandes","GPU lenta"],correct:0,topic:"Fundamentos IA"},
+{
+q:"Um modelo de IA é um dos principais componentes de sistemas inteligentes. Qual alternativa descreve corretamente seu papel?",
+options:[
+"Um conjunto de dados brutos utilizados para treinamento.",
+"Um artefato computacional resultante do treinamento de um algoritmo, capaz de aprender padrões e realizar previsões.",
+"Um banco de dados estruturado para armazenamento de informações.",
+"Um hardware especializado para processamento de dados."
+],
+correct:1, topic:"Fundamentos IA"
+},
+{
+q:"Ao desenvolver um sistema de IA, qual é a principal diferença entre um modelo e um dataset?",
+options:[
+"O dataset contém exemplos de dados, enquanto o modelo aprende padrões a partir deles.",
+"O modelo armazena dados, enquanto o dataset executa inferências.",
+"Ambos são equivalentes e podem ser usados de forma intercambiável.",
+"O dataset é utilizado apenas após o treinamento do modelo."
+],
+correct:0, topic:"Fundamentos IA"
+},
+{
+q:"Qual é a principal função de um dataset no processo de treinamento de um modelo de IA?",
+options:[
+"Executar o modelo em produção.",
+"Armazenar os resultados das previsões.",
+"Fornecer exemplos para que o modelo aprenda padrões e relações.",
+"Substituir o algoritmo de aprendizado."
+],
+correct:2, topic:"Fundamentos IA"
+},
+{
+q:"O que significa um modelo 'generalizar' bem?",
+options:[
+"Memorizar completamente os dados de treino.",
+"Executar mais rapidamente que outros modelos.",
+"Produzir boas previsões para dados novos e não vistos.",
+"Reduzir o tamanho do dataset."
+],
+correct:2, topic:"Fundamentos IA"
+},
+{
+q:"O que é inferência em Inteligência Artificial?",
+options:[
+"O processo de treinar um modelo do zero.",
+"O uso de um modelo treinado para gerar previsões ou respostas.",
+"A limpeza e preparação de dados.",
+"O download de modelos da internet."
+],
+correct:1, topic:"Fundamentos IA"
+},
 
 /* MODELOS */
-{q:"Modelo encapsula:",options:["Dados crus","Parâmetros aprendidos","Hardware","Scripts"],correct:1,topic:"Modelos"},
-{q:"Modelo supervisionado usa:",options:["Dados sem rótulo","Dados rotulados","Hardware","APIs"],correct:1,topic:"Modelos"},
-{q:"Rede neural é:",options:["Banco de dados","Modelo inspirado no cérebro","Servidor","Dataset"],correct:1,topic:"Modelos"},
-{q:"LLM significa:",options:["Large Language Model","Local Logic Machine","Linear Model","Low Memory"],correct:0,topic:"Modelos"},
-{q:"Exemplo de modelo:",options:["LLaMA","Linux","MySQL","HTML"],correct:0,topic:"Modelos"},
-{q:"Treinamento resulta em:",options:["Dataset","Modelo","API","Interface"],correct:1,topic:"Modelos"},
+{
+q:"Em engenharia de IA, o termo 'modelo' pode ser definido como:",
+options:[
+"Um algoritmo genérico ainda não treinado.",
+"Um artefato computacional treinado que encapsula parâmetros aprendidos.",
+"Um conjunto de regras fixas manuais.",
+"Um banco de dados de armazenamento."
+],
+correct:1, topic:"Modelos"
+},
+{
+q:"Durante o ciclo de vida de IA, qual alternativa descreve corretamente a relação entre dataset e modelo?",
+options:[
+"O modelo gera dados e o dataset executa previsões.",
+"O dataset é derivado do modelo após o treinamento.",
+"Ambos possuem exatamente a mesma função.",
+"O dataset fornece exemplos e o modelo aprende padrões a partir deles."
+],
+correct:3, topic:"Modelos"
+},
+{
+q:"O que caracteriza um modelo bem treinado?",
+options:[
+"Alta memorização dos dados de treino.",
+"Capacidade de generalizar para novos dados.",
+"Uso mínimo de dados.",
+"Execução apenas em ambiente local."
+],
+correct:1, topic:"Modelos"
+},
+{
+q:"O que são parâmetros em um modelo de IA?",
+options:[
+"Dados brutos de entrada.",
+"Valores aprendidos durante o treinamento.",
+"Resultados finais armazenados.",
+"Regras fixas definidas manualmente."
+],
+correct:1, topic:"Modelos"
+},
 
 /* DATASETS */
-{q:"Dataset é:",options:["Modelo","Dados para treino","Hardware","Algoritmo"],correct:1,topic:"Datasets"},
-{q:"Dataset supervisionado possui:",options:["Rótulos","APIs","Modelos","Logs"],correct:0,topic:"Datasets"},
-{q:"Qualidade do dataset impacta:",options:["Nada","Performance do modelo","Hardware","Cloud"],correct:1,topic:"Datasets"},
-{q:"Dataset grande permite:",options:["Pior modelo","Melhor generalização","Erro fixo","Treino rápido sempre"],correct:1,topic:"Datasets"},
-{q:"Dataset de teste serve para:",options:["Treinar","Avaliar","Salvar","Executar"],correct:1,topic:"Datasets"},
-{q:"Feature é:",options:["Variável de entrada","Modelo","API","Hardware"],correct:0,topic:"Datasets"},
+{
+q:"Qual alternativa descreve corretamente um dataset?",
+options:[
+"Um modelo pronto para uso.",
+"Um conjunto de dados utilizado para treinar ou avaliar modelos.",
+"Um hardware de processamento.",
+"Uma API de acesso a modelos."
+],
+correct:1, topic:"Datasets"
+},
+{
+q:"Qual é a importância da qualidade dos dados em um dataset?",
+options:[
+"Não impacta o modelo.",
+"Impacta diretamente a performance e confiabilidade do modelo.",
+"Apenas reduz o tempo de treinamento.",
+"Substitui o algoritmo de aprendizado."
+],
+correct:1, topic:"Datasets"
+},
+{
+q:"Qual a função de um dataset de teste?",
+options:[
+"Treinar o modelo.",
+"Avaliar o desempenho do modelo.",
+"Armazenar previsões.",
+"Executar inferência em produção."
+],
+correct:1, topic:"Datasets"
+},
 
 /* BIG DATA */
-{q:"Big Data refere-se a:",options:["Poucos dados","Grandes volumes","Hardware","APIs"],correct:1,topic:"Big Data"},
-{q:"Big Data ajuda IA porque:",options:["Remove treino","Melhora aprendizado","Substitui modelo","Reduz dados"],correct:1,topic:"Big Data"},
-{q:"Volume, variedade e velocidade são:",options:["3Vs","APIs","Modelos","Datasets"],correct:0,topic:"Big Data"},
-{q:"Sem Big Data:",options:["IA melhora","IA limita aprendizado","Nada muda","Cloud quebra"],correct:1,topic:"Big Data"},
-{q:"Exemplo Big Data:",options:["Logs massivos","Arquivo txt","Planilha pequena","Manual"],correct:0,topic:"Big Data"},
-{q:"Pipeline de dados inclui:",options:["Coleta e limpeza","Somente treino","Somente deploy","Nada"],correct:0,topic:"Big Data"},
+{
+q:"Por que o conceito de Big Data é fundamental para a IA?",
+options:[
+"Porque reduz a necessidade de modelos complexos.",
+"Porque grandes volumes de dados permitem melhor aprendizado e generalização.",
+"Porque elimina o treinamento.",
+"Porque substitui algoritmos."
+],
+correct:1, topic:"Big Data"
+},
+{
+q:"O termo Big Data refere-se principalmente a:",
+options:[
+"Pequenos conjuntos de dados.",
+"Grandes volumes, variedade e velocidade de dados.",
+"Apenas dados estruturados.",
+"Dados armazenados localmente."
+],
+correct:1, topic:"Big Data"
+},
+{
+q:"Sem grandes volumes de dados, modelos de IA tendem a:",
+options:[
+"Melhorar automaticamente.",
+"Ter limitações no aprendizado e generalização.",
+"Substituir algoritmos.",
+"Executar mais rápido."
+],
+correct:1, topic:"Big Data"
+},
 
 /* CLOUD */
-{q:"Cloud permite:",options:["Escala","Nada","Local apenas","Offline"],correct:0,topic:"Cloud"},
-{q:"Treinamento ocorre mais em:",options:["Cloud","Local leve","Mobile","Browser"],correct:0,topic:"Cloud"},
-{q:"Cloud vs local:",options:["Igual","Cloud escala","Local escala mais","Nada"],correct:1,topic:"Cloud"},
-{q:"GPU é usada para:",options:["Treino","Texto","Banco","Rede"],correct:0,topic:"Cloud"},
-{q:"Cloud oferece:",options:["Infraestrutura","Dataset","Modelo apenas","Nada"],correct:0,topic:"Cloud"},
-{q:"Exemplo cloud:",options:["AWS","Excel","HTML","Linux"],correct:0,topic:"Cloud"},
+{
+q:"Qual o principal papel da computação em nuvem na IA?",
+options:[
+"Substituir datasets.",
+"Fornecer infraestrutura escalável para treino e deploy.",
+"Eliminar o uso de modelos.",
+"Armazenar apenas arquivos simples."
+],
+correct:1, topic:"Cloud"
+},
+{
+q:"Onde geralmente ocorre o treinamento de modelos de grande escala?",
+options:[
+"Em dispositivos móveis.",
+"Em ambientes de nuvem com alto poder computacional.",
+"Em navegadores web.",
+"Em sistemas offline simples."
+],
+correct:1, topic:"Cloud"
+},
+{
+q:"Qual a principal diferença entre Cloud e execução local?",
+options:[
+"Não há diferença.",
+"Cloud é usada para escala e treino; local para inferência prática.",
+"Local substitui cloud completamente.",
+"Cloud é sempre gratuita."
+],
+correct:1, topic:"Cloud"
+},
 
 /* FERRAMENTAS DE IA */
-{q:"Hugging Face é:",options:["Hardware","Hub IA","SO","Banco"],correct:1,topic:"Ferramentas de IA"},
-{q:"HF Models:",options:["Modelos","Dados","CPU","Rede"],correct:0,topic:"Ferramentas de IA"},
-{q:"HF Datasets:",options:["Dados","Modelos","GPU","Apps"],correct:0,topic:"Ferramentas de IA"},
-{q:"HF Spaces:",options:["Apps","Banco","Cloud","Dataset"],correct:0,topic:"Ferramentas de IA"},
-{q:"Ollama serve para:",options:["Treinar","Rodar local","Cloud","Dataset"],correct:1,topic:"Ferramentas de IA"},
-{q:"Ollama é:",options:["Runtime","Dataset","Banco","Cloud"],correct:0,topic:"Ferramentas de IA"},
-{q:"Ferramentas aceleram:",options:["Dev IA","Erro","Hardware","Nada"],correct:0,topic:"Ferramentas de IA"},
+{
+q:"A plataforma Hugging Face pode ser descrita como:",
+options:[
+"Um sistema operacional.",
+"Uma plataforma que fornece modelos, datasets e ferramentas de IA.",
+"Um hardware especializado.",
+"Um banco de dados privado."
+],
+correct:1, topic:"Ferramentas de IA"
+},
+{
+q:"Por que desenvolvedores utilizam o Hugging Face?",
+options:[
+"Para evitar o uso de IA.",
+"Para acessar modelos prontos e acelerar o desenvolvimento.",
+"Para substituir datasets.",
+"Para criar hardware."
+],
+correct:1, topic:"Ferramentas de IA"
+},
+{
+q:"No Hugging Face, o que são 'Models'?",
+options:[
+"Documentações técnicas.",
+"Modelos pré-treinados disponíveis para uso.",
+"Scripts de limpeza de dados.",
+"Serviços de cloud."
+],
+correct:1, topic:"Ferramentas de IA"
+},
+{
+q:"No Hugging Face, o que são 'Spaces'?",
+options:[
+"Bancos de dados.",
+"Aplicações e demos interativas de IA.",
+"Servidores físicos.",
+"Modelos offline."
+],
+correct:1, topic:"Ferramentas de IA"
+},
+{
+q:"Qual a principal proposta do Ollama?",
+options:[
+"Treinar modelos na nuvem.",
+"Executar modelos de linguagem localmente de forma simples.",
+"Substituir datasets.",
+"Criar hardware de IA."
+],
+correct:1, topic:"Ferramentas de IA"
+},
+{
+q:"Como o Ollama é tecnicamente descrito?",
+options:[
+"Banco de dados.",
+"Software de inferência (runtime local).",
+"Sistema de Big Data.",
+"Rede social."
+],
+correct:1, topic:"Ferramentas de IA"
+},
 
 /* ECOSSISTEMA */
-{q:"OpenAI faz:",options:["Modelos","Hardware","Rede","Banco"],correct:0,topic:"Ecossistema"},
-{q:"Anthropic faz:",options:["IA","Rede","Cloud","Banco"],correct:0,topic:"Ecossistema"},
-{q:"Google IA atua em:",options:["Pesquisa","Banco","CPU","Rede"],correct:0,topic:"Ecossistema"},
-{q:"Ecossistema IA inclui:",options:["Modelos e dados","Só hardware","Só cloud","Nada"],correct:0,topic:"Ecossistema"},
-{q:"Empresas IA criam:",options:["Modelos","Datasets apenas","Redes","Nada"],correct:0,topic:"Ecossistema"},
-{q:"IA moderna depende de:",options:["Dados e modelos","Planilhas","Manual","Nada"],correct:0,topic:"Ecossistema"},
+{
+q:"Empresas como OpenAI, Anthropic e Google desempenham qual papel?",
+options:[
+"Desenvolvem modelos avançados e pesquisa em IA.",
+"Apenas vendem hardware.",
+"Atuam como provedores de internet.",
+"Produzem apenas datasets."
+],
+correct:0, topic:"Ecossistema"
+},
+{
+q:"O ecossistema de IA é composto por:",
+options:[
+"Apenas modelos.",
+"Modelos, dados, infraestrutura e aplicações.",
+"Apenas hardware.",
+"Apenas cloud."
+],
+correct:1, topic:"Ecossistema"
+},
 
 /* APLICAÇÕES */
-{q:"IA física:",options:["Robôs","Texto","Banco","API"],correct:0,topic:"Aplicações"},
-{q:"Chatbot usa:",options:["LLM","Planilha","Banco","Rede"],correct:0,topic:"Aplicações"},
-{q:"Visão computacional:",options:["Imagens","Texto","Som","Banco"],correct:0,topic:"Aplicações"},
-{q:"IA generativa:",options:["Cria conteúdo","Apaga dados","Só analisa","Nada"],correct:0,topic:"Aplicações"},
-{q:"Uso IA empresas:",options:["Automação","Nada","Manual","Offline"],correct:0,topic:"Aplicações"},
-{q:"IA aplicada resolve:",options:["Problemas reais","Nada","Só teoria","Só treino"],correct:0,topic:"Aplicações"}
+{
+q:"O termo 'IA física' refere-se a:",
+options:[
+"Sistemas exclusivamente virtuais.",
+"IA aplicada a robôs e sistemas que interagem com o mundo real.",
+"Modelos matemáticos abstratos.",
+"Softwares de física básica."
+],
+correct:1, topic:"Aplicações"
+},
+{
+q:"Qual é um exemplo de aplicação de IA generativa?",
+options:[
+"Criação de textos, imagens ou código.",
+"Armazenamento de dados.",
+"Gerenciamento de redes.",
+"Processamento de planilhas."
+],
+correct:0, topic:"Aplicações"
+},
+{
+q:"Como aplicações consomem modelos executados via Ollama?",
+options:[
+"Via telefone.",
+"Via API local.",
+"Via e-mail.",
+"Via planilhas."
+],
+correct:1, topic:"Aplicações"
+}
 
 ];
 
