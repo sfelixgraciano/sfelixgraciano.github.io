@@ -121,12 +121,24 @@ button:hover {
     from { opacity: 0; transform: translateY(10px);}
     to { opacity: 1; transform: translateY(0);}
 }
+
+.back-btn {
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #1e3a8a, #0ea5e9);
+    font-size: 14px;
+    padding: 10px;
+}
+
+.back-btn:hover {
+    transform: scale(1.05);
+}
 </style>
 </head>
 
 <body>
 
 <div class="quiz-container">
+    <button onclick="goBack()" class="back-btn">⬅ Voltar</button>
     <h1>Simulado: Ecossistema de IA</h1>
     <div id="questions"></div>
     <button onclick="calculateResult()">Finalizar</button>
@@ -520,6 +532,10 @@ function generateSummary(stats){
 
     document.getElementById('summary').innerHTML=summary;
     document.getElementById('summary').style.display="block";
+}
+
+function goBack() {
+    window.location.href = "index.html";
 }
 </script>
 
