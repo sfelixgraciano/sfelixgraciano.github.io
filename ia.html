@@ -1,1 +1,200 @@
-<h1>Inteligência Artificial</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revisão - Curso Técnico em Informática</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --azul: #0a3d62;
+    --azul-claro: #3c6382;
+    --laranja: #e67e22;
+    --laranja-claro: #f39c12;
+    --bg: #0f172a;
+    --card: #1e293b;
+    --texto: #e2e8f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--bg);
+    color: var(--texto);
+}
+
+/* Header */
+header {
+    background: linear-gradient(90deg, var(--azul), var(--laranja));
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+}
+
+/* Container */
+.container {
+    padding: 20px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* Search */
+.search {
+    margin-bottom: 20px;
+}
+
+.search input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: #111827;
+    color: white;
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+/* Card */
+.card {
+    background: var(--card);
+    padding: 15px;
+    border-radius: 12px;
+    transition: 0.3s;
+    border-left: 5px solid var(--laranja);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-left: 5px solid var(--azul-claro);
+}
+
+/* Title */
+.card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Links */
+.card a {
+    display: block;
+    text-decoration: none;
+    color: var(--laranja-claro);
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.card a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+    opacity: 0.6;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Revisão - Técnico em Informática</h1>
+</header>
+
+<div class="container">
+
+    <div class="search">
+        <input type="text" id="searchInput" placeholder="Buscar conteúdo...">
+    </div>
+
+    <div class="grid" id="grid">
+
+        <div class="card">
+            <h3>Algoritmos</h3>
+            <a href="#">Lógica de programação</a>
+            <a href="#">Estruturas condicionais</a>
+            <a href="#">Laços de repetição</a>
+        </div>
+
+        <div class="card">
+            <h3>Banco de Dados</h3>
+            <a href="#">Modelo relacional</a>
+            <a href="#">SQL básico</a>
+            <a href="#">Normalização</a>
+        </div>
+
+        <div class="card">
+            <h3>Redes</h3>
+            <a href="#">Modelo OSI</a>
+            <a href="#">TCP/IP</a>
+            <a href="#">Endereçamento IP</a>
+        </div>
+
+        <div class="card">
+            <h3>Sistemas Operacionais</h3>
+            <a href="#">Linux básico</a>
+            <a href="#">Gerenciamento de processos</a>
+            <a href="#">Sistema de arquivos</a>
+        </div>
+
+        <div class="card">
+            <h3>Programação Web</h3>
+            <a href="#">HTML e CSS</a>
+            <a href="#">JavaScript básico</a>
+            <a href="#">DOM</a>
+        </div>
+
+        <div class="card">
+            <h3>Cloud e IA</h3>
+            <a href="#">Fundamentos de Cloud</a>
+            <a href="#">Big Data</a>
+            <a href="#">Introdução à IA</a>
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    Simulados e Revisões • Curso Técnico
+</footer>
+
+<script>
+// Filtro de busca
+const input = document.getElementById('searchInput');
+const cards = document.querySelectorAll('.card');
+
+input.addEventListener('keyup', () => {
+    const value = input.value.toLowerCase();
+
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(value) ? 'block' : 'none';
+    });
+});
+</script>
+
+</body>
+</html>
