@@ -196,7 +196,23 @@
   .badge-pratica { background: rgba(0,230,118,0.1);   color: var(--verde);         border: 1px solid rgba(0,230,118,0.25); }
   .badge-doc     { background: rgba(100,100,255,0.1); color: #A78BFA;              border: 1px solid rgba(100,100,255,0.25); }
   .badge-chat    { background: rgba(255,200,0,0.1);   color: #FFD600;              border: 1px solid rgba(255,200,0,0.25); }
-
+  .badge-quiz {
+    background: rgba(255, 214, 0, 0.12);
+    color: #FFD600;
+    border: 1px solid rgba(255, 214, 0, 0.3);
+  }
+  
+  .badge-podcast {
+    background: rgba(156, 39, 176, 0.12);
+    color: #CE93D8;
+    border: 1px solid rgba(156, 39, 176, 0.3);
+  }
+  
+  .badge-slides {
+    background: rgba(0, 200, 255, 0.12);
+    color: #40C4FF;
+    border: 1px solid rgba(0, 200, 255, 0.3);
+  }
   /* EMPTY */
   #empty { display: none; text-align: center; padding: 3rem 1rem; font-family: 'Share Tech Mono', monospace; color: var(--texto-dim); position: relative; z-index: 10; }
   #empty span { color: var(--laranja); }
@@ -271,213 +287,39 @@
 
 const secoes = [
   {
-    titulo: "Tutores com IA — Converse e Aprenda",
-    icone:  "🤖",
-    tags:   "chat conversa tutor perguntas respostas",
+    titulo: "Simulado",
+    icone:  "🆕",
+    tags:   "simulado perguntas respostas",
     links: [
       {
-        nome: "ChatGPT — OpenAI",
-        desc: "Tire dúvidas sobre IA, algoritmos e qualquer conceito do simulado",
-        url:  "https://chat.openai.com/",
-        tipo: "chat"
+        nome: "Quiz - Revisão",
+        desc: "Tire dúvidas sobre IA, algoritmos e qualquer conceito do simulado (Feito pelo ChatGPT)",
+        url:  "/quiz.html",
+        tipo: "quiz"
       },
       {
-        nome: "Claude — Anthropic",
-        desc: "Explicações detalhadas, exemplos e revisão de conteúdo",
+        nome: "Podcast - Revisão",
+        desc: "Revisão em formato de podcast (feito com NotebookLM)",
         url:  "https://claude.ai/",
-        tipo: "chat"
+        tipo: "podcast"
       },
       {
-        nome: "Gemini — Google",
-        desc: "Assistente com acesso a conteúdo atualizado e integração Google",
+        nome: "Vídeo — Revisão",
+        desc: "Revisão em formato de vídeo (feito com NotebookLM)",
         url:  "https://gemini.google.com/",
-        tipo: "chat"
+        tipo: "video"
       },
       {
-        nome: "Copilot — Microsoft",
-        desc: "IA do Bing com respostas fundamentadas em fontes da web",
+        nome: "Slides — Revisão",
+        desc: "Revisão em formato de slides (feito com NotebookLM)",
         url:  "https://copilot.microsoft.com/",
-        tipo: "chat"
-      },
-    ]
-  },
-  {
-    titulo: "O que é Inteligência Artificial?",
-    icone:  "💡",
-    tags:   "inteligência artificial conceitos história definição",
-    links: [
-      {
-        nome: "IA explicada — IBM",
-        desc: "Artigo introdutório completo: conceitos, tipos e histórico da IA",
-        url:  "https://www.ibm.com/br-pt/topics/artificial-intelligence",
-        tipo: "artigo"
+        tipo: "slides"
       },
       {
-        nome: "História da IA — do Turing ao ChatGPT",
-        desc: "Linha do tempo dos principais marcos da inteligência artificial",
-        url:  "https://www.youtube.com/watch?v=JMUxmLyrhSk",
-        tipo: "video"
-      },
-      {
-        nome: "IA, ML e Deep Learning: qual a diferença?",
-        desc: "Diferenças entre os três conceitos mais confundidos da área",
-        url:  "https://www.youtube.com/watch?v=1k37OcjH7BM",
-        tipo: "video"
-      },
-      {
-        nome: "Elementos de IA — Universidade de Helsinque",
-        desc: "Curso gratuito e em português sobre fundamentos de IA",
-        url:  "https://www.elementsofai.com.br/",
-        tipo: "pratica"
-      },
-    ]
-  },
-  {
-    titulo: "Machine Learning",
-    icone:  "📈",
-    tags:   "machine learning aprendizado de máquina supervisionado classificação regressão",
-    links: [
-      {
-        nome: "Crash Course ML — Google",
-        desc: "Curso gratuito e interativo do Google com exemplos visuais",
-        url:  "https://developers.google.com/machine-learning/crash-course",
-        tipo: "pratica"
-      },
-      {
-        nome: "Supervised vs Unsupervised Learning",
-        desc: "Diferenças entre aprendizado supervisionado e não supervisionado",
-        url:  "https://www.youtube.com/watch?v=1FZ0A1QCMWc",
-        tipo: "video"
-      },
-      {
-        nome: "Overfitting e Underfitting — IBM",
-        desc: "Conceitos essenciais de generalização de modelos de ML",
-        url:  "https://www.ibm.com/br-pt/topics/overfitting",
-        tipo: "artigo"
-      },
-      {
-        nome: "Kaggle Learn — ML na prática",
-        desc: "Notebooks interativos e datasets reais para praticar",
-        url:  "https://www.kaggle.com/learn",
-        tipo: "pratica"
-      },
-    ]
-  },
-  {
-    titulo: "Redes Neurais & Deep Learning",
-    icone:  "🧠",
-    tags:   "redes neurais deep learning neurônio camadas backpropagation",
-    links: [
-      {
-        nome: "Como funcionam Redes Neurais — 3Blue1Brown",
-        desc: "Animação visual premiada: neurônios, pesos e backpropagation",
-        url:  "https://www.youtube.com/watch?v=aircAruvnKk",
-        tipo: "video"
-      },
-      {
-        nome: "TensorFlow Playground",
-        desc: "Monte e treine redes neurais no browser sem escrever código",
-        url:  "https://playground.tensorflow.org/",
-        tipo: "pratica"
-      },
-      {
-        nome: "Fast.ai — Deep Learning Prático",
-        desc: "Curso gratuito de DL com abordagem top-down e exemplos reais",
-        url:  "https://www.fast.ai/",
-        tipo: "pratica"
-      },
-      {
-        nome: "Deep Learning Book — MIT (gratuito)",
-        desc: "Referência técnica completa sobre redes neurais profundas",
-        url:  "https://www.deeplearningbook.org/",
-        tipo: "doc"
-      },
-    ]
-  },
-  {
-    titulo: "Processamento de Linguagem Natural",
-    icone:  "💬",
-    tags:   "nlp linguagem natural texto gpt llm transformer prompt",
-    links: [
-      {
-        nome: "O que são LLMs? — Cloudflare",
-        desc: "Explicação acessível sobre Large Language Models e como funcionam",
-        url:  "https://www.cloudflare.com/pt-br/learning/ai/what-is-large-language-model/",
-        tipo: "artigo"
-      },
-      {
-        nome: "Transformers — Attention Is All You Need",
-        desc: "O paper mais importante da IA moderna em linguagem simples",
-        url:  "https://www.youtube.com/watch?v=iDulhoQ2pro",
-        tipo: "video"
-      },
-      {
-        nome: "Prompt Engineering Guide",
-        desc: "Técnicas para escrever prompts eficazes para LLMs",
-        url:  "https://www.promptingguide.ai/pt",
-        tipo: "doc"
-      },
-      {
-        nome: "Hugging Face — Modelos e Demos",
-        desc: "Plataforma com modelos de NLP prontos para experimentar",
-        url:  "https://huggingface.co/",
-        tipo: "pratica"
-      },
-    ]
-  },
-  {
-    titulo: "Visão Computacional",
-    icone:  "👁️",
-    tags:   "visão computacional imagem reconhecimento CNN convolucional",
-    links: [
-      {
-        nome: "Visão Computacional — Introdução",
-        desc: "Como máquinas enxergam e interpretam imagens e vídeos",
-        url:  "https://www.youtube.com/watch?v=OcycT1Jwsns",
-        tipo: "video"
-      },
-      {
-        nome: "Teachable Machine — Google",
-        desc: "Treine um classificador de imagens no browser sem código",
-        url:  "https://teachablemachine.withgoogle.com/",
-        tipo: "pratica"
-      },
-      {
-        nome: "Papers With Code — Computer Vision",
-        desc: "Estado da arte em visão computacional com código aberto",
-        url:  "https://paperswithcode.com/area/computer-vision",
-        tipo: "doc"
-      },
-    ]
-  },
-  {
-    titulo: "Ética & IA Responsável",
-    icone:  "⚖️",
-    tags:   "ética viés bias responsabilidade regulação segurança alinhamento",
-    links: [
-      {
-        nome: "IA e Viés Algorítmico",
-        desc: "Como algoritmos podem reproduzir e amplificar preconceitos",
-        url:  "https://www.youtube.com/watch?v=59bMh59JQDo",
-        tipo: "video"
-      },
-      {
-        nome: "Responsible AI — Google",
-        desc: "Princípios e práticas de IA responsável da Google",
-        url:  "https://ai.google/responsibility/responsible-ai-practices/",
-        tipo: "doc"
-      },
-      {
-        nome: "AI Safety Research — Anthropic",
-        desc: "Pesquisa sobre segurança e alinhamento de sistemas de IA",
-        url:  "https://www.anthropic.com/research",
-        tipo: "doc"
-      },
-      {
-        nome: "Moral Machine — MIT",
-        desc: "Experimento sobre dilemas éticos envolvendo decisões de IA",
-        url:  "https://www.moralmachine.net/",
-        tipo: "pratica"
+        nome: "Slides - Aulas",
+        desc: "Todos os slides (feito por humano :D)",
+        url:  "",
+        tipo: "slides"
       },
     ]
   },
@@ -487,7 +329,16 @@ const secoes = [
    ⬇️  MOTOR — não precisa editar abaixo desta linha
 ================================================================ */
 
-const BADGE = { video:'vídeo', artigo:'artigo', pratica:'prática', doc:'doc', chat:'chat' };
+const BADGE = {
+  video: 'vídeo',
+  artigo: 'artigo',
+  pratica: 'prática',
+  doc: 'doc',
+  chat: 'chat',
+  quiz: 'quiz',
+  podcast: 'podcast',
+  slides: 'slides'
+};
 
 function render(data) {
   const main = document.getElementById('main');
