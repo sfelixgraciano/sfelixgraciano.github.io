@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutores — Player de Áudio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --laranja: #FF6B00;
+    --laranja-claro: #FF9A3C;
+    --laranja-glow: rgba(255, 107, 0, 0.35);
+    --azul: #0A3D8F;
+    --azul-neon: #00AAFF;
+    --azul-glow: rgba(0, 170, 255, 0.25);
+    --fundo: #050D1A;
+    --fundo2: #0B1628;
+    --fundo3: #0F1E38;
+    --texto: #E8F4FF;
+    --texto-dim: #7BA7CC;
+    --branco: #FFFFFF;
+    --cinza: #1A2A42;
+    --verde: #00E676;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--fundo);
+    color: var(--texto);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  /* grid de fundo */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,170,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,170,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none; z-index: 0;
+  }
+  /* scanlines */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── CARD PRINCIPAL ── */
+  .player-card {
+    position: relative; z-index: 10;
+    background: var(--fundo2);
+    border: 1px solid rgba(0,170,255,0.15);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 480px;
+    margin: 2rem 1rem;
+    box-shadow: 0 0 60px rgba(0,0,0,0.6), 0 0 30px var(--azul-glow);
+  }
+
+  /* barra terminal no topo */
+  .terminal-bar {
+    display: flex; align-items: center; gap: 0.4rem;
+    margin-bottom: 1.75rem;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #FF5F57; } .dot-y { background: #FFBD2E; } .dot-g { background: #28CA41; }
+  .terminal-path {
+    margin-left: 0.4rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem; color: var(--texto-dim);
+  }
+
+  /* título */
+  .player-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    letter-spacing: 0.05em;
+    background: linear-gradient(135deg, var(--laranja) 0%, var(--laranja-claro) 40%, var(--azul-neon) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 0.3rem;
+  }
+  .player-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem; color: var(--texto-dim); margin-bottom: 2rem;
+    letter-spacing: 0.08em;
+  }
+  .player-subtitle span { color: var(--laranja-claro); }
+
+  /* ── VISUALIZADOR ── */
+  .visualizer-wrap {
+    width: 100%; height: 72px;
+    background: var(--fundo3);
+    border: 1px solid rgba(0,170,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  #canvas {
+    width: 100%; height: 100%;
+    display: block;
+  }
+  .visualizer-idle {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem; color: var(--texto-dim); letter-spacing: 0.15em;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  /* ── TEMPO ── */
+  .time-row {
+    display: flex; justify-content: space-between;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem; color: var(--texto-dim);
+    margin-bottom: 0.5rem;
+  }
+  #current-time { color: var(--azul-neon); }
+
+  /* ── SEEK BAR ── */
+  .seek-wrap {
+    position: relative; height: 6px;
+    background: var(--cinza);
+    border-radius: 3px;
+    margin-bottom: 1.75rem;
+    cursor: pointer;
+  }
+  #seek-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--azul-neon), var(--laranja-claro));
+    border-radius: 3px;
+    transition: width 0.1s linear;
+    pointer-events: none;
+  }
+  .seek-thumb {
+    position: absolute;
+    top: 50%; transform: translate(-50%, -50%);
+    width: 14px; height: 14px;
+    background: var(--branco);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--azul-glow);
+    left: 0%;
+    pointer-events: none;
+    transition: left 0.1s linear;
+  }
+
+  /* ── CONTROLES ── */
+  .controls {
+    display: flex; align-items: center; justify-content: center; gap: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+  .btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--texto-dim);
+    transition: color 0.2s, transform 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    padding: 0.3rem;
+  }
+  .btn:hover { color: var(--azul-neon); transform: scale(1.15); }
+  .btn:active { transform: scale(0.95); }
+
+  .btn-play {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--laranja), var(--laranja-claro));
+    color: var(--branco);
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--laranja-glow);
+    transition: box-shadow 0.2s, transform 0.15s;
+  }
+  .btn-play:hover {
+    color: var(--branco);
+    box-shadow: 0 0 32px var(--laranja-glow);
+    transform: scale(1.08);
+  }
+  .btn-play svg { width: 24px; height: 24px; }
+  .btn svg { width: 20px; height: 20px; }
+
+  /* ── VELOCIDADE ── */
+  .speed-row {
+    display: flex; align-items: center; gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .speed-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem; color: var(--texto-dim); letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+  .speed-btns { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .speed-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem; padding: 0.2rem 0.5rem;
+    border-radius: 4px; border: 1px solid rgba(0,170,255,0.2);
+    background: var(--fundo3); color: var(--texto-dim);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .speed-btn:hover { border-color: var(--azul-neon); color: var(--azul-neon); }
+  .speed-btn.active { background: rgba(0,170,255,0.12); border-color: var(--azul-neon); color: var(--azul-neon); }
+
+  /* ── VOLUME ── */
+  .volume-row {
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .vol-icon { color: var(--texto-dim); flex-shrink: 0; }
+  .vol-icon svg { width: 16px; height: 16px; }
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    flex: 1; height: 4px;
+    background: var(--cinza); border-radius: 2px; cursor: pointer;
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: var(--azul-neon);
+    box-shadow: 0 0 6px var(--azul-glow);
+    cursor: pointer;
+  }
+  .vol-val {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem; color: var(--texto-dim);
+    min-width: 28px; text-align: right;
+  }
+
+  /* ── STATUS BADGE ── */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.2rem 0.6rem; border-radius: 4px;
+    background: rgba(0,230,118,0.08); color: var(--verde);
+    border: 1px solid rgba(0,230,118,0.2);
+    margin-top: 1.5rem;
+    transition: all 0.3s;
+  }
+  .status-badge.paused {
+    background: rgba(0,170,255,0.08); color: var(--azul-neon);
+    border-color: rgba(0,170,255,0.2);
+  }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--verde); animation: pulse 1.2s ease-in-out infinite;
+  }
+  .status-badge.paused .status-dot {
+    background: var(--azul-neon); animation: none;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  @media (max-width: 520px) {
+    .player-card { padding: 1.75rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="player-card">
+
+  <div class="terminal-bar">
+    <div class="dot dot-r"></div>
+    <div class="dot dot-y"></div>
+    <div class="dot dot-g"></div>
+    <span class="terminal-path">~/revisao/audio $</span>
+  </div>
+
+  <div class="player-title">Tutores</div>
+  <div class="player-subtitle">Curso Técnico em Informática &nbsp;·&nbsp; <span>Revisão em Áudio</span></div>
+
+  <!-- visualizador -->
+  <div class="visualizer-wrap">
+    <canvas id="canvas"></canvas>
+    <div class="visualizer-idle" id="idle-msg">[ aguardando reprodução ]</div>
+  </div>
+
+  <!-- tempo -->
+  <div class="time-row">
+    <span id="current-time">00:00</span>
+    <span id="total-time">--:--</span>
+  </div>
+
+  <!-- seek -->
+  <div class="seek-wrap" id="seek-wrap">
+    <div id="seek-fill"></div>
+    <div class="seek-thumb" id="seek-thumb"></div>
+  </div>
+
+  <!-- controles -->
+  <div class="controls">
+    <!-- retroceder 10s -->
+    <button class="btn" id="btn-back" title="−10s">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/>
+        <text x="7.5" y="15" font-size="5.5" fill="currentColor" stroke="none" font-family="monospace">10</text>
+      </svg>
+    </button>
+
+    <!-- play/pause -->
+    <button class="btn btn-play" id="btn-play" title="Play / Pause">
+      <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+    </button>
+
+    <!-- avançar 10s -->
+    <button class="btn" id="btn-fwd" title="+10s">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3.5"/>
+        <text x="7.5" y="15" font-size="5.5" fill="currentColor" stroke="none" font-family="monospace">10</text>
+      </svg>
+    </button>
+  </div>
+
+  <!-- velocidade -->
+  <div class="speed-row">
+    <span class="speed-label">velocidade:</span>
+    <div class="speed-btns">
+      <button class="speed-btn" data-speed="0.5">0.5×</button>
+      <button class="speed-btn" data-speed="0.75">0.75×</button>
+      <button class="speed-btn active" data-speed="1">1×</button>
+      <button class="speed-btn" data-speed="1.25">1.25×</button>
+      <button class="speed-btn" data-speed="1.5">1.5×</button>
+      <button class="speed-btn" data-speed="2">2×</button>
+    </div>
+  </div>
+
+  <!-- volume -->
+  <div class="volume-row">
+    <span class="vol-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      </svg>
+    </span>
+    <input type="range" id="vol-range" min="0" max="1" step="0.01" value="1">
+    <span class="vol-val" id="vol-val">100%</span>
+  </div>
+
+  <!-- status -->
+  <div class="status-badge paused" id="status-badge">
+    <div class="status-dot"></div>
+    <span id="status-text">pausado</span>
+  </div>
+
+</div>
+
+<!-- elemento de áudio oculto -->
+<audio id="audio" src="https://1drv.ms/u/c/348B3F34FE6C332F/IQBbS6k66KGtQLpyh8YCPzgZAdSAN7s_qGijnqvw63oH3zs?e=ueRQVZ" preload="metadata"></audio>
+
+<script>
+  const audio       = document.getElementById('audio');
+  const canvas      = document.getElementById('canvas');
+  const ctx         = canvas.getContext('2d');
+  const btnPlay     = document.getElementById('btn-play');
+  const iconPlay    = document.getElementById('icon-play');
+  const iconPause   = document.getElementById('icon-pause');
+  const seekWrap    = document.getElementById('seek-wrap');
+  const seekFill    = document.getElementById('seek-fill');
+  const seekThumb   = document.getElementById('seek-thumb');
+  const currentTime = document.getElementById('current-time');
+  const totalTime   = document.getElementById('total-time');
+  const volRange    = document.getElementById('vol-range');
+  const volVal      = document.getElementById('vol-val');
+  const idleMsg     = document.getElementById('idle-msg');
+  const statusBadge = document.getElementById('status-badge');
+  const statusText  = document.getElementById('status-text');
+
+  // ── Web Audio API (visualizador) ──
+  let audioCtx, analyser, source, animId;
+  let vizReady = false;
+
+  function initAudio() {
+    if (vizReady) return;
+    audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+    analyser  = audioCtx.createAnalyser();
+    analyser.fftSize = 128;
+    source    = audioCtx.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    vizReady  = true;
+  }
+
+  // ── Visualizador ──
+  function resizeCanvas() {
+    canvas.width  = canvas.offsetWidth  * devicePixelRatio;
+    canvas.height = canvas.offsetHeight * devicePixelRatio;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function drawBars() {
+    animId = requestAnimationFrame(drawBars);
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(data);
+
+    const barW  = W / data.length * 1.6;
+    const gap   = W / data.length * 0.4;
+    let x = 0;
+
+    data.forEach((val, i) => {
+      const t   = i / data.length;
+      const r   = Math.round(0   + t * 255);
+      const g   = Math.round(170 + t * (107 - 170));
+      const b   = Math.round(255 + t * (0   - 255));
+      const h   = (val / 255) * H * 0.9;
+
+      ctx.fillStyle = `rgba(${r},${g},${b},0.85)`;
+      ctx.beginPath();
+      ctx.roundRect(x, H - h, barW, h, 2);
+      ctx.fill();
+      x += barW + gap;
+    });
+  }
+
+  // ── Play / Pause ──
+  function setPlaying(playing) {
+    iconPlay.style.display  = playing ? 'none' : '';
+    iconPause.style.display = playing ? '' : 'none';
+    idleMsg.style.opacity   = playing ? '0' : '1';
+    statusBadge.classList.toggle('paused', !playing);
+    statusText.textContent = playing ? 'reproduzindo' : 'pausado';
+  }
+
+  btnPlay.addEventListener('click', () => {
+    initAudio();
+    if (audio.paused) {
+      audio.play();
+      drawBars();
+    } else {
+      audio.pause();
+      cancelAnimationFrame(animId);
+    }
+  });
+
+  audio.addEventListener('play',  () => setPlaying(true));
+  audio.addEventListener('pause', () => setPlaying(false));
+  audio.addEventListener('ended', () => { setPlaying(false); cancelAnimationFrame(animId); });
+
+  // ── Tempo ──
+  function fmt(s) {
+    if (isNaN(s)) return '--:--';
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  }
+
+  audio.addEventListener('loadedmetadata', () => {
+    totalTime.textContent = fmt(audio.duration);
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    currentTime.textContent = fmt(audio.currentTime);
+    const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+    seekFill.style.width  = pct + '%';
+    seekThumb.style.left  = pct + '%';
+  });
+
+  // ── Seek ──
+  let seeking = false;
+
+  function seekTo(e) {
+    const rect = seekWrap.getBoundingClientRect();
+    const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    audio.currentTime = pct * audio.duration;
+  }
+
+  seekWrap.addEventListener('mousedown', e => { seeking = true; seekTo(e); });
+  window.addEventListener('mousemove',  e => { if (seeking) seekTo(e); });
+  window.addEventListener('mouseup',    ()=> { seeking = false; });
+
+  seekWrap.addEventListener('touchstart', e => { seeking = true; seekTo(e.touches[0]); }, {passive:true});
+  window.addEventListener('touchmove',   e => { if (seeking) seekTo(e.touches[0]); }, {passive:true});
+  window.addEventListener('touchend',    ()=> { seeking = false; });
+
+  // ── Pular ──
+  document.getElementById('btn-back').addEventListener('click', () => {
+    audio.currentTime = Math.max(0, audio.currentTime - 10);
+  });
+  document.getElementById('btn-fwd').addEventListener('click', () => {
+    audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+  });
+
+  // ── Velocidade ──
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      audio.playbackRate = parseFloat(btn.dataset.speed);
+    });
+  });
+
+  // ── Volume ──
+  volRange.addEventListener('input', () => {
+    audio.volume = volRange.value;
+    volVal.textContent = Math.round(volRange.value * 100) + '%';
+  });
+
+  // barra de volume — cor dinâmica
+  volRange.addEventListener('input', updateVolTrack);
+  function updateVolTrack() {
+    const pct = volRange.value * 100;
+    volRange.style.background = `linear-gradient(90deg, var(--azul-neon) ${pct}%, var(--cinza) ${pct}%)`;
+  }
+  updateVolTrack();
+</script>
+</body>
+</html>
