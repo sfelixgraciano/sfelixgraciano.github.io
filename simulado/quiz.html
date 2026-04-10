@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado IA</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto:wght@300;400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --azul: #0f172a;
+            --azul2: #1e3a8a;
+            --laranja: #f97316;
+            --verde: #22c55e;
+            --vermelho: #ef4444;
+            --card: #1e293b;
+            --text: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--azul), var(--azul2));
+            color: var(--text);
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: auto;
+            background: #020617;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        h1 {
+            font-family: 'Orbitron';
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .question:hover {
+            transform: scale(1.01);
+        }
+
+        .options li {
+            list-style: none;
+            margin: 8px 0;
+        }
+
+        label {
+            display: block;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        label:hover {
+            background: rgba(249, 115, 22, 0.2);
+        }
+
+        .correct {
+            background: rgba(34, 197, 94, 0.3);
+            border-left: 4px solid var(--verde);
+        }
+
+        .wrong {
+            background: rgba(239, 68, 68, 0.3);
+            border-left: 4px solid var(--vermelho);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: linear-gradient(90deg, var(--laranja), #fb923c);
+            color: white;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        #summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #020617;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        .fade {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-btn {
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #1e3a8a, #0ea5e9);
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="quiz-container">
+        <button onclick="goBack()" class="back-btn">⬅ Voltar</button>
+        <h1>Simulado: Ecossistema de IA</h1>
+        <div id="questions"></div>
+        <button onclick="calculateResult()">Finalizar</button>
+        <div id="result"></div>
+        <div id="summary"></div>
+    </div>
+
+    <script>
+        const questionsData = [
+
+            /* FUNDAMENTOS */
+            {
+                q: "Um modelo de IA é um dos principais componentes de sistemas inteligentes. Qual alternativa descreve corretamente seu papel?",
+                options: [
+                    "Um conjunto de dados brutos utilizados para treinamento.",
+                    "Um artefato computacional resultante do treinamento de um algoritmo, capaz de aprender padrões e realizar previsões.",
+                    "Um banco de dados estruturado para armazenamento de informações.",
+                    "Um hardware especializado para processamento de dados."
+                ],
+                correct: 1, topic: "Fundamentos IA"
+            },
+            {
+                q: "Ao desenvolver um sistema de IA, qual é a principal diferença entre um modelo e um dataset?",
+                options: [
+                    "O dataset contém exemplos de dados, enquanto o modelo aprende padrões a partir deles.",
+                    "O modelo armazena dados, enquanto o dataset executa inferências.",
+                    "Ambos são equivalentes e podem ser usados de forma intercambiável.",
+                    "O dataset é utilizado apenas após o treinamento do modelo."
+                ],
+                correct: 0, topic: "Fundamentos IA"
+            },
+            {
+                q: "Qual é a principal função de um dataset no processo de treinamento de um modelo de IA?",
+                options: [
+                    "Executar o modelo em produção.",
+                    "Armazenar os resultados das previsões.",
+                    "Fornecer exemplos para que o modelo aprenda padrões e relações.",
+                    "Substituir o algoritmo de aprendizado."
+                ],
+                correct: 2, topic: "Fundamentos IA"
+            },
+            {
+                q: "O que significa um modelo 'generalizar' bem?",
+                options: [
+                    "Memorizar completamente os dados de treino.",
+                    "Executar mais rapidamente que outros modelos.",
+                    "Produzir boas previsões para dados novos e não vistos.",
+                    "Reduzir o tamanho do dataset."
+                ],
+                correct: 2, topic: "Fundamentos IA"
+            },
+            {
+                q: "O que é inferência em Inteligência Artificial?",
+                options: [
+                    "O processo de treinar um modelo do zero.",
+                    "O uso de um modelo treinado para gerar previsões ou respostas.",
+                    "A limpeza e preparação de dados.",
+                    "O download de modelos da internet."
+                ],
+                correct: 1, topic: "Fundamentos IA"
+            },
+
+            /* MODELOS */
+            {
+                q: "Em engenharia de IA, o termo 'modelo' pode ser definido como:",
+                options: [
+                    "Um algoritmo genérico ainda não treinado.",
+                    "Um artefato computacional treinado que encapsula parâmetros aprendidos.",
+                    "Um conjunto de regras fixas manuais.",
+                    "Um banco de dados de armazenamento."
+                ],
+                correct: 1, topic: "Modelos"
+            },
+            {
+                q: "Durante o ciclo de vida de IA, qual alternativa descreve corretamente a relação entre dataset e modelo?",
+                options: [
+                    "O modelo gera dados e o dataset executa previsões.",
+                    "O dataset é derivado do modelo após o treinamento.",
+                    "Ambos possuem exatamente a mesma função.",
+                    "O dataset fornece exemplos e o modelo aprende padrões a partir deles."
+                ],
+                correct: 3, topic: "Modelos"
+            },
+            {
+                q: "O que caracteriza um modelo bem treinado?",
+                options: [
+                    "Alta memorização dos dados de treino.",
+                    "Capacidade de generalizar para novos dados.",
+                    "Uso mínimo de dados.",
+                    "Execução apenas em ambiente local."
+                ],
+                correct: 1, topic: "Modelos"
+            },
+            {
+                q: "O que são parâmetros em um modelo de IA?",
+                options: [
+                    "Dados brutos de entrada.",
+                    "Valores aprendidos durante o treinamento.",
+                    "Resultados finais armazenados.",
+                    "Regras fixas definidas manualmente."
+                ],
+                correct: 1, topic: "Modelos"
+            },
+
+            /* DATASETS */
+            {
+                q: "Qual alternativa descreve corretamente um dataset?",
+                options: [
+                    "Um modelo pronto para uso.",
+                    "Um conjunto de dados utilizado para treinar ou avaliar modelos.",
+                    "Um hardware de processamento.",
+                    "Uma API de acesso a modelos."
+                ],
+                correct: 1, topic: "Datasets"
+            },
+            {
+                q: "Qual é a importância da qualidade dos dados em um dataset?",
+                options: [
+                    "Não impacta o modelo.",
+                    "Impacta diretamente a performance e confiabilidade do modelo.",
+                    "Apenas reduz o tempo de treinamento.",
+                    "Substitui o algoritmo de aprendizado."
+                ],
+                correct: 1, topic: "Datasets"
+            },
+            {
+                q: "Qual a função de um dataset de teste?",
+                options: [
+                    "Treinar o modelo.",
+                    "Avaliar o desempenho do modelo.",
+                    "Armazenar previsões.",
+                    "Executar inferência em produção."
+                ],
+                correct: 1, topic: "Datasets"
+            },
+
+            /* BIG DATA */
+            {
+                q: "Por que o conceito de Big Data é fundamental para a IA?",
+                options: [
+                    "Porque reduz a necessidade de modelos complexos.",
+                    "Porque grandes volumes de dados permitem melhor aprendizado e generalização.",
+                    "Porque elimina o treinamento.",
+                    "Porque substitui algoritmos."
+                ],
+                correct: 1, topic: "Big Data"
+            },
+            {
+                q: "O termo Big Data refere-se principalmente a:",
+                options: [
+                    "Pequenos conjuntos de dados.",
+                    "Grandes volumes, variedade e velocidade de dados.",
+                    "Apenas dados estruturados.",
+                    "Dados armazenados localmente."
+                ],
+                correct: 1, topic: "Big Data"
+            },
+            {
+                q: "Sem grandes volumes de dados, modelos de IA tendem a:",
+                options: [
+                    "Melhorar automaticamente.",
+                    "Ter limitações no aprendizado e generalização.",
+                    "Substituir algoritmos.",
+                    "Executar mais rápido."
+                ],
+                correct: 1, topic: "Big Data"
+            },
+
+            /* CLOUD */
+            {
+                q: "Qual o principal papel da computação em nuvem na IA?",
+                options: [
+                    "Substituir datasets.",
+                    "Fornecer infraestrutura escalável para treino e deploy.",
+                    "Eliminar o uso de modelos.",
+                    "Armazenar apenas arquivos simples."
+                ],
+                correct: 1, topic: "Cloud"
+            },
+            {
+                q: "Onde geralmente ocorre o treinamento de modelos de grande escala?",
+                options: [
+                    "Em dispositivos móveis.",
+                    "Em ambientes de nuvem com alto poder computacional.",
+                    "Em navegadores web.",
+                    "Em sistemas offline simples."
+                ],
+                correct: 1, topic: "Cloud"
+            },
+            {
+                q: "Qual a principal diferença entre Cloud e execução local?",
+                options: [
+                    "Não há diferença.",
+                    "Cloud é usada para escala e treino; local para inferência prática.",
+                    "Local substitui cloud completamente.",
+                    "Cloud é sempre gratuita."
+                ],
+                correct: 1, topic: "Cloud"
+            },
+
+            /* FERRAMENTAS DE IA */
+            {
+                q: "A plataforma Hugging Face pode ser descrita como:",
+                options: [
+                    "Um sistema operacional.",
+                    "Uma plataforma que fornece modelos, datasets e ferramentas de IA.",
+                    "Um hardware especializado.",
+                    "Um banco de dados privado."
+                ],
+                correct: 1, topic: "Ferramentas de IA"
+            },
+            {
+                q: "Por que desenvolvedores utilizam o Hugging Face?",
+                options: [
+                    "Para evitar o uso de IA.",
+                    "Para acessar modelos prontos e acelerar o desenvolvimento.",
+                    "Para substituir datasets.",
+                    "Para criar hardware."
+                ],
+                correct: 1, topic: "Ferramentas de IA"
+            },
+            {
+                q: "No Hugging Face, o que são 'Models'?",
+                options: [
+                    "Documentações técnicas.",
+                    "Modelos pré-treinados disponíveis para uso.",
+                    "Scripts de limpeza de dados.",
+                    "Serviços de cloud."
+                ],
+                correct: 1, topic: "Ferramentas de IA"
+            },
+            {
+                q: "No Hugging Face, o que são 'Spaces'?",
+                options: [
+                    "Bancos de dados.",
+                    "Aplicações e demos interativas de IA.",
+                    "Servidores físicos.",
+                    "Modelos offline."
+                ],
+                correct: 1, topic: "Ferramentas de IA"
+            },
+            {
+                q: "Qual a principal proposta do Ollama?",
+                options: [
+                    "Treinar modelos na nuvem.",
+                    "Executar modelos de linguagem localmente de forma simples.",
+                    "Substituir datasets.",
+                    "Criar hardware de IA."
+                ],
+                correct: 1, topic: "Ferramentas de IA"
+            },
+            {
+                q: "Como o Ollama é tecnicamente descrito?",
+                options: [
+                    "Banco de dados.",
+                    "Software de inferência (runtime local).",
+                    "Sistema de Big Data.",
+                    "Rede social."
+                ],
+                correct: 1, topic: "Ferramentas de IA"
+            },
+
+            /* ECOSSISTEMA */
+            {
+                q: "Empresas como OpenAI, Anthropic e Google desempenham qual papel?",
+                options: [
+                    "Desenvolvem modelos avançados e pesquisa em IA.",
+                    "Apenas vendem hardware.",
+                    "Atuam como provedores de internet.",
+                    "Produzem apenas datasets."
+                ],
+                correct: 0, topic: "Ecossistema"
+            },
+            {
+                q: "O ecossistema de IA é composto por:",
+                options: [
+                    "Apenas modelos.",
+                    "Modelos, dados, infraestrutura e aplicações.",
+                    "Apenas hardware.",
+                    "Apenas cloud."
+                ],
+                correct: 1, topic: "Ecossistema"
+            },
+
+            /* APLICAÇÕES */
+            {
+                q: "O termo 'IA física' refere-se a:",
+                options: [
+                    "Sistemas exclusivamente virtuais.",
+                    "IA aplicada a robôs e sistemas que interagem com o mundo real.",
+                    "Modelos matemáticos abstratos.",
+                    "Softwares de física básica."
+                ],
+                correct: 1, topic: "Aplicações"
+            },
+            {
+                q: "Qual é um exemplo de aplicação de IA generativa?",
+                options: [
+                    "Criação de textos, imagens ou código.",
+                    "Armazenamento de dados.",
+                    "Gerenciamento de redes.",
+                    "Processamento de planilhas."
+                ],
+                correct: 0, topic: "Aplicações"
+            },
+            {
+                q: "Como aplicações consomem modelos executados via Ollama?",
+                options: [
+                    "Via telefone.",
+                    "Via API local.",
+                    "Via e-mail.",
+                    "Via planilhas."
+                ],
+                correct: 1, topic: "Aplicações"
+            }
+
+        ];
+
+        const container = document.getElementById('questions');
+
+        questionsData.forEach((q, i) => {
+            const div = document.createElement('div');
+            div.className = 'question fade';
+            div.innerHTML = `<p><b>${i + 1}. ${q.q}</b></p>`;
+
+            q.options.forEach((opt, j) => {
+                div.innerHTML += `
+        <label>
+            <input type="radio" name="q${i}" value="${j}">
+            ${opt}
+        </label>`;
+            });
+
+            container.appendChild(div);
+        });
+
+        document.addEventListener('change', e => {
+            if (e.target.type === "radio") {
+                const labels = e.target.closest('.question').querySelectorAll('label');
+                labels.forEach(l => l.style.background = "");
+                e.target.parentElement.style.background = "rgba(249,115,22,0.3)";
+            }
+        });
+
+        function calculateResult() {
+            let score = 0;
+            let topicStats = {};
+
+            document.querySelectorAll('.question').forEach((div, i) => {
+                const q = questionsData[i];
+                const selected = div.querySelector('input:checked');
+
+                if (!topicStats[q.topic]) topicStats[q.topic] = { correct: 0, total: 0 };
+                topicStats[q.topic].total++;
+
+                if (selected) {
+                    if (parseInt(selected.value) === q.correct) {
+                        score++;
+                        topicStats[q.topic].correct++;
+                        selected.parentElement.classList.add('correct');
+                    } else {
+                        selected.parentElement.classList.add('wrong');
+                        div.querySelectorAll('input')[q.correct].parentElement.classList.add('correct');
+                    }
+                }
+            });
+
+            document.getElementById('result').innerHTML = `Você acertou ${score}/${questionsData.length}`;
+
+            generateSummary(topicStats);
+        }
+
+        function generateSummary(stats) {
+            let summary = "<h3>Resumo de estudo</h3>";
+
+            let sorted = Object.entries(stats).sort((a, b) => {
+                return (a[1].correct / a[1].total) - (b[1].correct / b[1].total);
+            });
+
+            summary += "<p><b>Pontos a reforçar:</b></p><ul>";
+            sorted.slice(0, 3).forEach(([topic, data]) => {
+                summary += `<li>${topic}</li>`;
+            });
+            summary += "</ul>";
+
+            summary += "<p><b>Pontos fortes:</b></p><ul>";
+            sorted.slice(-3).forEach(([topic, data]) => {
+                summary += `<li>${topic}</li>`;
+            });
+            summary += "</ul>";
+
+            document.getElementById('summary').innerHTML = summary;
+            document.getElementById('summary').style.display = "block";
+        }
+
+        function goBack() {
+            window.location.href = "ia.html";
+        }
+    </script>
+
+</body>
+
+</html>
