@@ -1,394 +1,693 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutores — Revisão para Simulado</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --laranja: #FF6B00;
-    --laranja-claro: #FF9A3C;
-    --laranja-glow: rgba(255, 107, 0, 0.3);
-    --azul: #0A3D8F;
-    --azul-claro: #1565C0;
-    --azul-neon: #00AAFF;
-    --azul-glow: rgba(0, 170, 255, 0.25);
-    --fundo: #050D1A;
-    --fundo2: #0B1628;
-    --fundo3: #0F1E38;
-    --texto: #E8F4FF;
-    --texto-dim: #7BA7CC;
-    --branco: #FFFFFF;
-    --cinza: #1A2A42;
-    --verde: #00E676;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background-color: var(--fundo);
-    color: var(--texto);
-    font-family: 'Nunito', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(0,170,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,170,255,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none; z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed; inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
-    pointer-events: none; z-index: 0;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutores — Revisão para Simulado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Nunito:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --laranja: #FF6B00;
+      --laranja-claro: #FF9A3C;
+      --laranja-glow: rgba(255, 107, 0, 0.3);
+      --azul: #0A3D8F;
+      --azul-claro: #1565C0;
+      --azul-neon: #00AAFF;
+      --azul-glow: rgba(0, 170, 255, 0.25);
+      --fundo: #050D1A;
+      --fundo2: #0B1628;
+      --fundo3: #0F1E38;
+      --texto: #E8F4FF;
+      --texto-dim: #7BA7CC;
+      --branco: #FFFFFF;
+      --cinza: #1A2A42;
+      --verde: #00E676;
+    }
 
-  /* HEADER */
-  header {
-    position: relative; z-index: 10;
-    padding: 3rem 2rem 2rem;
-    text-align: center;
-    border-bottom: 1px solid rgba(0,170,255,0.15);
-    background: linear-gradient(180deg, rgba(10,61,143,0.5) 0%, transparent 100%);
-  }
-  .header-tag {
-    display: inline-block;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.7rem; color: var(--azul-neon);
-    letter-spacing: 0.3em; text-transform: uppercase;
-    margin-bottom: 1rem; opacity: 0.8;
-  }
-  .header-tag::before { content: '[ '; }
-  .header-tag::after  { content: ' ]'; }
-  h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 900;
-    font-size: clamp(2rem, 6vw, 4rem);
-    letter-spacing: 0.05em; line-height: 1.1;
-    background: linear-gradient(135deg, var(--laranja) 0%, var(--laranja-claro) 40%, var(--azul-neon) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    position: relative;
-  }
-  .glitch-wrap { position: relative; display: inline-block; }
-  .glitch-wrap::before {
-    content: 'Tutores';
-    position: absolute; top: 0; left: 2px;
-    background: linear-gradient(135deg, var(--azul-neon), var(--laranja));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    opacity: 0.4; animation: glitch 4s infinite;
-  }
-  @keyframes glitch {
-    0%, 90%, 100% { transform: translate(0); clip-path: none; }
-    91% { transform: translate(-2px, 1px); clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); }
-    93% { transform: translate(2px, -1px); clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); }
-    95% { transform: translate(0); clip-path: none; }
-  }
-  .subtitulo { font-size: 1rem; color: var(--texto-dim); margin-top: 0.75rem; letter-spacing: 0.05em; }
-  .subtitulo span { color: var(--laranja-claro); font-weight: 700; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  /* BUSCA */
-  .search-wrap {
-    position: relative; z-index: 10;
-    max-width: 600px; margin: 2rem auto; padding: 0 1.5rem;
-  }
-  .search-icon {
-    position: absolute; left: 2.5rem; top: 50%;
-    transform: translateY(-50%);
-    color: var(--azul-neon); font-size: 1rem; pointer-events: none;
-  }
-  #busca {
-    width: 100%; background: var(--fundo3);
-    border: 1px solid rgba(0,170,255,0.3); border-radius: 6px;
-    padding: 0.85rem 1.25rem 0.85rem 3rem;
-    font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--texto);
-    outline: none; transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  #busca::placeholder { color: var(--texto-dim); opacity: 0.6; }
-  #busca:focus {
-    border-color: var(--azul-neon);
-    box-shadow: 0 0 0 3px var(--azul-glow), 0 0 20px var(--azul-glow);
-  }
+    body {
+      background-color: var(--fundo);
+      color: var(--texto);
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-  /* TERMINAL BAR */
-  .terminal-bar {
-    background: var(--cinza); border-radius: 8px 8px 0 0;
-    padding: 0.5rem 1rem;
-    display: flex; align-items: center; gap: 0.5rem;
-    max-width: 1200px; margin: 0 auto;
-    position: relative; z-index: 10;
-  }
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot-r { background: #FF5F57; } .dot-y { background: #FFBD2E; } .dot-g { background: #28CA41; }
-  .terminal-path { margin-left: 0.5rem; font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--texto-dim); }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 170, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 170, 255, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-  /* MAIN */
-  main { position: relative; z-index: 10; max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem 4rem; }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 4px);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-  /* SECAO */
-  .secao { margin-bottom: 3rem; animation: fadeUp 0.5s ease both; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  .secao-header {
-    display: flex; align-items: center; gap: 0.75rem;
-    margin-bottom: 1rem; padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255,107,0,0.2);
-  }
-  .secao-icone {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--laranja), var(--laranja-claro));
-    border-radius: 6px; display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem; flex-shrink: 0; box-shadow: 0 0 12px var(--laranja-glow);
-  }
-  .secao-titulo {
-    font-family: 'Orbitron', sans-serif; font-weight: 700;
-    font-size: 0.95rem; letter-spacing: 0.08em; color: var(--laranja-claro); text-transform: uppercase;
-  }
-  .secao-count {
-    margin-left: auto; font-family: 'Share Tech Mono', monospace;
-    font-size: 0.7rem; color: var(--texto-dim); background: var(--cinza);
-    padding: 0.2rem 0.5rem; border-radius: 4px;
-  }
+    /* HEADER */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 170, 255, 0.15);
+      background: linear-gradient(180deg, rgba(10, 61, 143, 0.5) 0%, transparent 100%);
+    }
 
-  /* GRID */
-  .links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem; }
+    .header-tag {
+      display: inline-block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--azul-neon);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      opacity: 0.8;
+    }
 
-  /* CARD */
-  .link-card {
-    display: flex; align-items: flex-start; gap: 0.75rem;
-    background: var(--fundo2); border: 1px solid rgba(0,170,255,0.1);
-    border-radius: 8px; padding: 0.9rem 1rem;
-    text-decoration: none; color: var(--texto);
-    transition: all 0.25s ease; position: relative; overflow: hidden;
-  }
-  .link-card::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-    background: linear-gradient(180deg, var(--azul-neon), var(--azul));
-    transform: scaleY(0); transform-origin: bottom; transition: transform 0.25s ease;
-  }
-  .link-card:hover {
-    border-color: rgba(0,170,255,0.4); background: var(--fundo3);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.4), 0 0 20px var(--azul-glow);
-  }
-  .link-card:hover::before { transform: scaleY(1); }
-  .link-num {
-    font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
-    color: var(--azul-neon); opacity: 0.6; line-height: 1.8; flex-shrink: 0; min-width: 22px;
-  }
-  .link-info { flex: 1; min-width: 0; }
-  .link-nome {
-    font-size: 0.9rem; font-weight: 700; color: var(--branco);
-    line-height: 1.3; margin-bottom: 0.25rem;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .link-desc { font-size: 0.75rem; color: var(--texto-dim); line-height: 1.4; }
-  .link-badge {
-    flex-shrink: 0; font-family: 'Share Tech Mono', monospace;
-    font-size: 0.6rem; padding: 0.2rem 0.4rem; border-radius: 4px;
-    text-transform: uppercase; letter-spacing: 0.05em; align-self: center;
-  }
-  .badge-video   { background: rgba(255,107,0,0.15);  color: var(--laranja-claro); border: 1px solid rgba(255,107,0,0.3); }
-  .badge-artigo  { background: rgba(0,170,255,0.1);   color: var(--azul-neon);     border: 1px solid rgba(0,170,255,0.25); }
-  .badge-pratica { background: rgba(0,230,118,0.1);   color: var(--verde);         border: 1px solid rgba(0,230,118,0.25); }
-  .badge-doc     { background: rgba(100,100,255,0.1); color: #A78BFA;              border: 1px solid rgba(100,100,255,0.25); }
-  .badge-chat    { background: rgba(255,200,0,0.1);   color: #FFD600;              border: 1px solid rgba(255,200,0,0.25); }
-  .badge-quiz {
-    background: rgba(255, 214, 0, 0.12);
-    color: #FFD600;
-    border: 1px solid rgba(255, 214, 0, 0.3);
-  }
-  
-  .badge-podcast {
-    background: rgba(156, 39, 176, 0.12);
-    color: #CE93D8;
-    border: 1px solid rgba(156, 39, 176, 0.3);
-  }
-  
-  .badge-slides {
-    background: rgba(0, 200, 255, 0.12);
-    color: #40C4FF;
-    border: 1px solid rgba(0, 200, 255, 0.3);
-  }
-  /* EMPTY */
-  #empty { display: none; text-align: center; padding: 3rem 1rem; font-family: 'Share Tech Mono', monospace; color: var(--texto-dim); position: relative; z-index: 10; }
-  #empty span { color: var(--laranja); }
+    .header-tag::before {
+      content: '[ ';
+    }
 
-  /* CURSOR */
-  .cursor {
-    display: inline-block; width: 3px; height: 1.1em;
-    background: var(--azul-neon); margin-left: 4px; vertical-align: middle;
-    animation: blink 1s step-end infinite;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
+    .header-tag::after {
+      content: ' ]';
+    }
 
-  footer {
-    position: relative; z-index: 10;
-    text-align: center; padding: 1.5rem;
-    border-top: 1px solid rgba(0,170,255,0.1);
-    font-family: 'Share Tech Mono', monospace; font-size: 0.7rem;
-    color: var(--texto-dim); opacity: 0.6;
-  }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 6vw, 4rem);
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--laranja) 0%, var(--laranja-claro) 40%, var(--azul-neon) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
 
-  @media (max-width: 600px) {
-    .links-grid { grid-template-columns: 1fr; }
-    h1 { font-size: 1.8rem; }
-  }
-  html { scroll-behavior: smooth; }
-</style>
+    .glitch-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .glitch-wrap::before {
+      content: 'Tutores';
+      position: absolute;
+      top: 0;
+      left: 2px;
+      background: linear-gradient(135deg, var(--azul-neon), var(--laranja));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0.4;
+      animation: glitch 4s infinite;
+    }
+
+    @keyframes glitch {
+
+      0%,
+      90%,
+      100% {
+        transform: translate(0);
+        clip-path: none;
+      }
+
+      91% {
+        transform: translate(-2px, 1px);
+        clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+      }
+
+      93% {
+        transform: translate(2px, -1px);
+        clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+      }
+
+      95% {
+        transform: translate(0);
+        clip-path: none;
+      }
+    }
+
+    .subtitulo {
+      font-size: 1rem;
+      color: var(--texto-dim);
+      margin-top: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .subtitulo span {
+      color: var(--laranja-claro);
+      font-weight: 700;
+    }
+
+    /* BUSCA */
+    .search-wrap {
+      position: relative;
+      z-index: 10;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 2.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--azul-neon);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    #busca {
+      width: 100%;
+      background: var(--fundo3);
+      border: 1px solid rgba(0, 170, 255, 0.3);
+      border-radius: 6px;
+      padding: 0.85rem 1.25rem 0.85rem 3rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--texto);
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    #busca::placeholder {
+      color: var(--texto-dim);
+      opacity: 0.6;
+    }
+
+    #busca:focus {
+      border-color: var(--azul-neon);
+      box-shadow: 0 0 0 3px var(--azul-glow), 0 0 20px var(--azul-glow);
+    }
+
+    /* TERMINAL BAR */
+    .terminal-bar {
+      background: var(--cinza);
+      border-radius: 8px 8px 0 0;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-r {
+      background: #FF5F57;
+    }
+
+    .dot-y {
+      background: #FFBD2E;
+    }
+
+    .dot-g {
+      background: #28CA41;
+    }
+
+    .terminal-path {
+      margin-left: 0.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--texto-dim);
+    }
+
+    /* MAIN */
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 4rem;
+    }
+
+    /* SECAO */
+    .secao {
+      margin-bottom: 3rem;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .secao-desativada {
+      opacity: 0.45;
+    }
+
+    .secao-desativada .secao-header {
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .secao-desativada .secao-titulo {
+      color: var(--texto-dim);
+    }
+
+    .secao-desativada .link-card {
+      pointer-events: none;
+      cursor: not-allowed;
+      border-color: rgba(255, 255, 255, 0.12);
+      background: rgba(15, 30, 56, 0.6);
+      box-shadow: none;
+      transform: none;
+    }
+
+    .secao-desativada .link-card::before {
+      transform: scaleY(1);
+      background: linear-gradient(180deg, #64748b, #334155);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .secao-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 107, 0, 0.2);
+    }
+
+    .secao-icone {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--laranja), var(--laranja-claro));
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      box-shadow: 0 0 12px var(--laranja-glow);
+    }
+
+    .secao-titulo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      color: var(--laranja-claro);
+      text-transform: uppercase;
+    }
+
+    .secao-count {
+      margin-left: auto;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--texto-dim);
+      background: var(--cinza);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    /* GRID */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.75rem;
+    }
+
+    /* CARD */
+    .link-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      background: var(--fundo2);
+      border: 1px solid rgba(0, 170, 255, 0.1);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      text-decoration: none;
+      color: var(--texto);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--azul-neon), var(--azul));
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s ease;
+    }
+
+    .link-card:hover {
+      border-color: rgba(0, 170, 255, 0.4);
+      background: var(--fundo3);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4), 0 0 20px var(--azul-glow);
+    }
+
+    .link-card:hover::before {
+      transform: scaleY(1);
+    }
+
+    .link-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--azul-neon);
+      opacity: 0.6;
+      line-height: 1.8;
+      flex-shrink: 0;
+      min-width: 22px;
+    }
+
+    .link-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .link-nome {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--branco);
+      line-height: 1.3;
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .link-desc {
+      font-size: 0.75rem;
+      color: var(--texto-dim);
+      line-height: 1.4;
+    }
+
+    .link-badge {
+      flex-shrink: 0;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      align-self: center;
+    }
+
+    .badge-video {
+      background: rgba(255, 107, 0, 0.15);
+      color: var(--laranja-claro);
+      border: 1px solid rgba(255, 107, 0, 0.3);
+    }
+
+    .badge-artigo {
+      background: rgba(0, 170, 255, 0.1);
+      color: var(--azul-neon);
+      border: 1px solid rgba(0, 170, 255, 0.25);
+    }
+
+    .badge-pratica {
+      background: rgba(0, 230, 118, 0.1);
+      color: var(--verde);
+      border: 1px solid rgba(0, 230, 118, 0.25);
+    }
+
+    .badge-doc {
+      background: rgba(100, 100, 255, 0.1);
+      color: #A78BFA;
+      border: 1px solid rgba(100, 100, 255, 0.25);
+    }
+
+    .badge-chat {
+      background: rgba(255, 200, 0, 0.1);
+      color: #FFD600;
+      border: 1px solid rgba(255, 200, 0, 0.25);
+    }
+
+    .badge-quiz {
+      background: rgba(255, 214, 0, 0.12);
+      color: #FFD600;
+      border: 1px solid rgba(255, 214, 0, 0.3);
+    }
+
+    .badge-podcast {
+      background: rgba(156, 39, 176, 0.12);
+      color: #CE93D8;
+      border: 1px solid rgba(156, 39, 176, 0.3);
+    }
+
+    .badge-slides {
+      background: rgba(0, 200, 255, 0.12);
+      color: #40C4FF;
+      border: 1px solid rgba(0, 200, 255, 0.3);
+    }
+
+    /* EMPTY */
+    #empty {
+      display: none;
+      text-align: center;
+      padding: 3rem 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--texto-dim);
+      position: relative;
+      z-index: 10;
+    }
+
+    #empty span {
+      color: var(--laranja);
+    }
+
+    /* CURSOR */
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1.1em;
+      background: var(--azul-neon);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(0, 170, 255, 0.1);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--texto-dim);
+      opacity: 0.6;
+    }
+
+    @media (max-width: 600px) {
+      .links-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
+
 <body>
 
-<header>
-  <div class="header-tag">Curso Técnico em Informática</div>
-  <h1><span class="glitch-wrap">Tutores</span><span class="cursor"></span></h1>
-  <p class="subtitulo">Material de <span>revisão</span> — Inteligência Artificial</p>
-</header>
+  <header>
+    <div class="header-tag">Curso Técnico em Informática</div>
+    <h1><span class="glitch-wrap">Tutores</span><span class="cursor"></span></h1>
+    <p class="subtitulo">Material de <span>revisão</span> — Inteligência Artificial</p>
+  </header>
 
-<div class="search-wrap">
-  <span class="search-icon">⌕</span>
-  <input type="text" id="busca" placeholder="buscar conteúdo..." autocomplete="off" spellcheck="false">
-</div>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="busca" placeholder="buscar conteúdo..." autocomplete="off" spellcheck="false">
+  </div>
 
-<div class="terminal-bar">
-  <div class="dot dot-r"></div>
-  <div class="dot dot-y"></div>
-  <div class="dot dot-g"></div>
-  <span class="terminal-path">~/revisao/ia $</span>
-</div>
+  <div class="terminal-bar">
+    <div class="dot dot-r"></div>
+    <div class="dot dot-y"></div>
+    <div class="dot dot-g"></div>
+    <span class="terminal-path">~/revisao/ia $</span>
+  </div>
 
-<main id="main"></main>
-<div id="empty">
-  <div style="font-size:2rem;margin-bottom:0.5rem;">⌀</div>
-  nenhum resultado para "<span id="empty-termo"></span>"
-</div>
+  <main id="main"></main>
+  <div id="empty">
+    <div style="font-size:2rem;margin-bottom:0.5rem;">⌀</div>
+    nenhum resultado para "<span id="empty-termo"></span>"
+  </div>
 
-<footer>&lt;/&gt; Tutores — Curso Técnico em Informática &nbsp;|&nbsp; Revisão para Simulado</footer>
+  <footer>&lt;/&gt; Tutores — Curso Técnico em Informática &nbsp;|&nbsp; Revisão para Simulado</footer>
 
-<script>
-/* ================================================================
-   ✏️  EDITE AQUI — adicione, remova ou reordene seções e links
-   ----------------------------------------------------------------
-   Campos de cada SEÇÃO:
-     titulo : string  — nome exibido no cabeçalho da seção
-     icone  : string  — emoji exibido no ícone laranja
-     tags   : string  — palavras-chave extras para a busca
-     links  : array   — lista de links (veja campos abaixo)
+  <script>
+    /* ================================================================
+       ✏️  EDITE AQUI — adicione, remova ou reordene seções e links
+       ----------------------------------------------------------------
+       Campos de cada SEÇÃO:
+         titulo : string  — nome exibido no cabeçalho da seção
+         icone  : string  — emoji exibido no ícone laranja
+         tags   : string  — palavras-chave extras para a busca
+         links  : array   — lista de links (veja campos abaixo)
+    
+       Campos de cada LINK:
+         nome   : string  — título exibido no card
+         desc   : string  — descrição curta (1-2 linhas)
+         url    : string  — endereço completo (https://...)
+         tipo   : 'video' | 'artigo' | 'pratica' | 'doc' | 'chat'
+    ================================================================ */
 
-   Campos de cada LINK:
-     nome   : string  — título exibido no card
-     desc   : string  — descrição curta (1-2 linhas)
-     url    : string  — endereço completo (https://...)
-     tipo   : 'video' | 'artigo' | 'pratica' | 'doc' | 'chat'
-================================================================ */
-
-const secoes = [
-  {
-    titulo: "Simulado",
-    icone:  "🆕",
-    tags:   "simulado perguntas respostas",
-    links: [
+    const secoes = [
       {
-        nome: "Quiz - Revisão",
-        desc: "Tire dúvidas sobre IA, algoritmos e qualquer conceito do simulado (Feito pelo ChatGPT)",
-        url:  "/simulado/quiz.html",
-        tipo: "quiz"
+        titulo: "Avaliação",
+        icone: "📋",
+        ativa: true,
+        tags: "avaliação prova teste exame",
+        links: [
+          {
+            nome: "Quiz - Revisão",
+            desc: "Tire dúvidas sobre IA, algoritmos e qualquer conceito do simulado (Feito pelo ChatGPT)",
+            url: "/avaliacao/quiz.html",
+            tipo: "quiz"
+          },
+          {
+            nome: "Podcast - Revisão",
+            desc: "Revisão em formato de podcast (feito com NotebookLM)",
+            url: "/avaliacao/audio.html",
+            tipo: "podcast"
+          },
+          {
+            nome: "Vídeo — Revisão",
+            desc: "Revisão em formato de vídeo (feito com NotebookLM)",
+            url: "/avaliacao/video.html",
+            tipo: "video"
+          },
+          {
+            nome: "Slides — Revisão",
+            desc: "Revisão em formato de slides (feito com NotebookLM)",
+            url: "/avaliacao/pdf.html",
+            tipo: "slides"
+          },
+        ]
       },
       {
-        nome: "Podcast - Revisão",
-        desc: "Revisão em formato de podcast (feito com NotebookLM)",
-        url:  "/simulado/audio.html",
-        tipo: "podcast"
+        titulo: "Simulado",
+        icone: "🆕",
+        ativa: false,
+        tags: "simulado perguntas respostas",
+        links: [
+          {
+            nome: "Quiz - Revisão",
+            desc: "Tire dúvidas sobre IA, algoritmos e qualquer conceito do simulado (Feito pelo ChatGPT)",
+            url: "/simulado/quiz.html",
+            tipo: "quiz"
+          },
+          {
+            nome: "Podcast - Revisão",
+            desc: "Revisão em formato de podcast (feito com NotebookLM)",
+            url: "/simulado/audio.html",
+            tipo: "podcast"
+          },
+          {
+            nome: "Vídeo — Revisão",
+            desc: "Revisão em formato de vídeo (feito com NotebookLM)",
+            url: "/simulado/video.html",
+            tipo: "video"
+          },
+          {
+            nome: "Slides — Revisão",
+            desc: "Revisão em formato de slides (feito com NotebookLM)",
+            url: "/simulado/pdf.html",
+            tipo: "slides"
+          },
+          {
+            nome: "Slides - Aulas",
+            desc: "Todos os slides (feito por humano :D)",
+            url: "https://1drv.ms/f/c/348B3F34FE6C332F/IgCYi2SliauvS7rCYQVs73O1AarM5_TjqyB0X0OMndCj7fA?e=avtRI7",
+            tipo: "slides"
+          },
+        ]
       },
-      {
-        nome: "Vídeo — Revisão",
-        desc: "Revisão em formato de vídeo (feito com NotebookLM)",
-        url:  "/simulado/video.html",
-        tipo: "video"
-      },
-      {
-        nome: "Slides — Revisão",
-        desc: "Revisão em formato de slides (feito com NotebookLM)",
-        url:  "/simulado/pdf.html",
-        tipo: "slides"
-      },
-      {
-        nome: "Slides - Aulas",
-        desc: "Todos os slides (feito por humano :D)",
-        url:  "https://1drv.ms/f/c/348B3F34FE6C332F/IgCYi2SliauvS7rCYQVs73O1AarM5_TjqyB0X0OMndCj7fA?e=avtRI7",
-        tipo: "slides"
-      },
-    ]
-  },
-  {
-    titulo: "Avaliação",
-    icone:  "📋",
-    tags:   "avaliação prova teste exame",
-    links: [
-      {
-        nome: "Quiz - Revisão",
-        desc: "Tire dúvidas sobre IA, algoritmos e qualquer conceito do simulado (Feito pelo ChatGPT)",
-        url:  "/avaliacao/quiz.html",
-        tipo: "quiz"
-      },
-      {
-        nome: "Podcast - Revisão",
-        desc: "Revisão em formato de podcast (feito com NotebookLM)",
-        url:  "/avaliacao/audio.html",
-        tipo: "podcast"
-      },
-      {
-        nome: "Vídeo — Revisão",
-        desc: "Revisão em formato de vídeo (feito com NotebookLM)",
-        url:  "/avaliacao/video.html",
-        tipo: "video"
-      },
-      {
-        nome: "Slides — Revisão",
-        desc: "Revisão em formato de slides (feito com NotebookLM)",
-        url:  "/avaliacao/pdf.html",
-        tipo: "slides"
-      },
-    ]
-  },
-];
 
-/* ================================================================
-   ⬇️  MOTOR — não precisa editar abaixo desta linha
-================================================================ */
+    ];
 
-const BADGE = {
-  video: 'vídeo',
-  artigo: 'artigo',
-  pratica: 'prática',
-  doc: 'doc',
-  chat: 'chat',
-  quiz: 'quiz',
-  podcast: 'podcast',
-  slides: 'slides'
-};
+    /* ================================================================
+       ⬇️  MOTOR — não precisa editar abaixo desta linha
+    ================================================================ */
 
-function render(data) {
-  const main = document.getElementById('main');
-  main.innerHTML = '';
-  data.forEach((sec, si) => {
-    const el = document.createElement('section');
-    el.className = 'secao';
-    el.dataset.secao = (sec.tags || sec.titulo).toLowerCase();
-    el.style.animationDelay = `${(si * 0.06).toFixed(2)}s`;
-    el.innerHTML = `
+    const BADGE = {
+      video: 'vídeo',
+      artigo: 'artigo',
+      pratica: 'prática',
+      doc: 'doc',
+      chat: 'chat',
+      quiz: 'quiz',
+      podcast: 'podcast',
+      slides: 'slides'
+    };
+
+    function render(data) {
+      const main = document.getElementById('main');
+      main.innerHTML = '';
+      data.forEach((sec, si) => {
+        const el = document.createElement('section');
+        const desativada = sec.ativa === false;
+        el.className = `secao${desativada ? ' secao-desativada' : ''}`;
+        el.dataset.secao = (sec.tags || sec.titulo).toLowerCase();
+        el.style.animationDelay = `${(si * 0.06).toFixed(2)}s`;
+        el.innerHTML = `
       <div class="secao-header">
         <div class="secao-icone">${sec.icone}</div>
         <h2 class="secao-titulo">${sec.titulo}</h2>
-        <span class="secao-count">${sec.links.length} link${sec.links.length !== 1 ? 's' : ''}</span>
+        <span class="secao-count">${desativada ? 'desativada' : `${sec.links.length} link${sec.links.length !== 1 ? 's' : ''}`}</span>
       </div>
       <div class="links-grid">
         ${sec.links.map((lk, li) => `
-          <a class="link-card" href="${lk.url}" target="_blank" rel="noopener">
-            <span class="link-num">${String(li+1).padStart(2,'0')}</span>
+          <a class="link-card" href="${desativada ? '#' : lk.url}" target="${desativada ? '_self' : '_blank'}" rel="noopener" ${desativada ? 'tabindex="-1" aria-disabled="true" onclick="return false"' : ''}>
+            <span class="link-num">${String(li + 1).padStart(2, '0')}</span>
             <div class="link-info">
               <div class="link-nome">${lk.nome}</div>
               <div class="link-desc">${lk.desc}</div>
@@ -396,41 +695,42 @@ function render(data) {
             <span class="link-badge badge-${lk.tipo}">${BADGE[lk.tipo] || lk.tipo}</span>
           </a>`).join('')}
       </div>`;
-    main.appendChild(el);
-  });
-}
+        main.appendChild(el);
+      });
+    }
 
-function filtrar() {
-  const termo = document.getElementById('busca').value.toLowerCase().trim();
-  const secs  = document.querySelectorAll('.secao');
-  const emptyEl    = document.getElementById('empty');
-  const emptyTermo = document.getElementById('empty-termo');
-  let total = 0;
+    function filtrar() {
+      const termo = document.getElementById('busca').value.toLowerCase().trim();
+      const secs = document.querySelectorAll('.secao');
+      const emptyEl = document.getElementById('empty');
+      const emptyTermo = document.getElementById('empty-termo');
+      let total = 0;
 
-  secs.forEach(sec => {
-    const cards   = sec.querySelectorAll('.link-card');
-    const tagsSec = sec.dataset.secao || '';
-    let vis = 0;
+      secs.forEach(sec => {
+        const cards = sec.querySelectorAll('.link-card');
+        const tagsSec = sec.dataset.secao || '';
+        let vis = 0;
 
-    if (!termo) { cards.forEach(c => c.style.display = ''); sec.style.display = ''; return; }
+        if (!termo) { cards.forEach(c => c.style.display = ''); sec.style.display = ''; return; }
 
-    const secMatch = tagsSec.includes(termo);
-    cards.forEach(card => {
-      const ok = secMatch || card.innerText.toLowerCase().includes(termo);
-      card.style.display = ok ? '' : 'none';
-      if (ok) vis++;
-    });
+        const secMatch = tagsSec.includes(termo);
+        cards.forEach(card => {
+          const ok = secMatch || card.innerText.toLowerCase().includes(termo);
+          card.style.display = ok ? '' : 'none';
+          if (ok) vis++;
+        });
 
-    sec.style.display = vis === 0 ? 'none' : '';
-    total += vis;
-  });
+        sec.style.display = vis === 0 ? 'none' : '';
+        total += vis;
+      });
 
-  emptyTermo.textContent = termo;
-  emptyEl.style.display = (termo && total === 0) ? 'block' : 'none';
-}
+      emptyTermo.textContent = termo;
+      emptyEl.style.display = (termo && total === 0) ? 'block' : 'none';
+    }
 
-render(secoes);
-document.getElementById('busca').addEventListener('input', filtrar);
-</script>
+    render(secoes);
+    document.getElementById('busca').addEventListener('input', filtrar);
+  </script>
 </body>
+
 </html>
