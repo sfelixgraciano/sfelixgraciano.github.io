@@ -1,277 +1,369 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutores — Player de Áudio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --laranja: #FF6B00;
-    --laranja-claro: #FF9A3C;
-    --laranja-glow: rgba(255, 107, 0, 0.35);
-    --azul: #0A3D8F;
-    --azul-neon: #00AAFF;
-    --azul-glow: rgba(0, 170, 255, 0.25);
-    --fundo: #050D1A;
-    --fundo2: #0B1628;
-    --fundo3: #0F1E38;
-    --texto: #E8F4FF;
-    --texto-dim: #7BA7CC;
-    --branco: #FFFFFF;
-    --cinza: #1A2A42;
-    --verde: #00E676;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutores — Player de Áudio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Nunito:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --laranja: #FF6B00;
+      --laranja-claro: #FF9A3C;
+      --laranja-glow: rgba(255, 107, 0, 0.35);
+      --azul: #0A3D8F;
+      --azul-neon: #00AAFF;
+      --azul-glow: rgba(0, 170, 255, 0.25);
+      --fundo: #050D1A;
+      --fundo2: #0B1628;
+      --fundo3: #0F1E38;
+      --texto: #E8F4FF;
+      --texto-dim: #7BA7CC;
+      --branco: #FFFFFF;
+      --cinza: #1A2A42;
+      --verde: #00E676;
+    }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  body {
-    background-color: var(--fundo);
-    color: var(--texto);
-    font-family: 'Nunito', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow-x: hidden;
-  }
+    body {
+      background-color: var(--fundo);
+      color: var(--texto);
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
 
-  /* grid de fundo */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(0,170,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,170,255,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none; z-index: 0;
-  }
-  /* scanlines */
-  body::after {
-    content: '';
-    position: fixed; inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
-    pointer-events: none; z-index: 0;
-  }
+    /* grid de fundo */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 170, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 170, 255, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-  /* ── CARD PRINCIPAL ── */
-  .player-card {
-    position: relative; z-index: 10;
-    background: var(--fundo2);
-    border: 1px solid rgba(0,170,255,0.15);
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
-    width: 100%;
-    max-width: 520px;
-    margin: 2rem 1rem;
-    box-shadow: 0 0 60px rgba(0,0,0,0.6), 0 0 30px var(--azul-glow);
-  }
+    /* scanlines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 4px);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-  /* barra terminal no topo */
-  .terminal-bar {
-    display: flex; align-items: center; gap: 0.4rem;
-    margin-bottom: 1.75rem;
-  }
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot-r { background: #FF5F57; }
-  .dot-y { background: #FFBD2E; }
-  .dot-g { background: #28CA41; }
-  .terminal-path {
-    margin-left: 0.4rem;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem; color: var(--texto-dim);
-  }
+    /* ── CARD PRINCIPAL ── */
+    .player-card {
+      position: relative;
+      z-index: 10;
+      background: var(--fundo2);
+      border: 1px solid rgba(0, 170, 255, 0.15);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 520px;
+      margin: 2rem 1rem;
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.6), 0 0 30px var(--azul-glow);
+    }
 
-  /* título */
-  .player-title {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 900;
-    font-size: clamp(1.4rem, 5vw, 2rem);
-    letter-spacing: 0.05em;
-    background: linear-gradient(135deg, var(--laranja) 0%, var(--laranja-claro) 40%, var(--azul-neon) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    margin-bottom: 0.3rem;
-  }
-  .player-subtitle {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.7rem; color: var(--texto-dim); margin-bottom: 2rem;
-    letter-spacing: 0.08em;
-  }
-  .player-subtitle span { color: var(--laranja-claro); }
+    /* barra terminal no topo */
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1.75rem;
+    }
 
-  /* ── IFRAME WRAPPER ── */
-  .iframe-wrap {
-    width: 100%;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid rgba(0,170,255,0.2);
-    box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(0,170,255,0.05);
-    background: var(--fundo3);
-    /* mascara a UI branca do OneDrive com uma moldura escura */
-    position: relative;
-  }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
 
-  /* borda neon animada ao redor do iframe */
-  .iframe-wrap::before {
-    content: '';
-    position: absolute; inset: 0;
-    border-radius: 10px;
-    padding: 1px;
-    background: linear-gradient(135deg, var(--azul-neon), var(--laranja), var(--azul-neon));
-    background-size: 200% 200%;
-    animation: borderAnim 4s linear infinite;
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    z-index: 2;
-  }
-  @keyframes borderAnim {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+    .dot-r {
+      background: #FF5F57;
+    }
 
-  .iframe-wrap iframe {
-    display: block;
-    width: 100%;
-    height: 140px;
-    border: none;
-    /* neutraliza o fundo branco do player OneDrive */
-    filter: none;
-  }
+    .dot-y {
+      background: #FFBD2E;
+    }
 
-  /* label abaixo do iframe */
-  .iframe-label {
-    display: flex; align-items: center; gap: 0.5rem;
-    margin-top: 0.75rem; margin-bottom: 1.75rem;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.62rem; color: var(--texto-dim); letter-spacing: 0.1em;
-  }
-  .iframe-label .dot-onedrive {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--azul-neon);
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+    .dot-g {
+      background: #28CA41;
+    }
 
-  /* ── DIVISOR ── */
-  .divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0,170,255,0.2), transparent);
-    margin: 0 0 1.5rem;
-  }
+    .terminal-path {
+      margin-left: 0.4rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--texto-dim);
+    }
 
-  /* ── INFO CARDS ── */
-  .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
-    margin-bottom: 1.5rem;
-  }
-  .info-item {
-    background: var(--fundo3);
-    border: 1px solid rgba(0,170,255,0.08);
-    border-radius: 8px;
-    padding: 0.65rem 0.75rem;
-  }
-  .info-item-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.58rem; color: var(--texto-dim);
-    letter-spacing: 0.1em; text-transform: uppercase;
-    margin-bottom: 0.2rem;
-  }
-  .info-item-value {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem; font-weight: 700;
-    color: var(--laranja-claro);
-  }
+    /* título */
+    .player-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.4rem, 5vw, 2rem);
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, var(--laranja) 0%, var(--laranja-claro) 40%, var(--azul-neon) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.3rem;
+    }
 
-  /* ── DICA ── */
-  .tip {
-    display: flex; align-items: flex-start; gap: 0.6rem;
-    background: rgba(0,170,255,0.05);
-    border: 1px solid rgba(0,170,255,0.12);
-    border-radius: 8px;
-    padding: 0.75rem;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.62rem; color: var(--texto-dim);
-    line-height: 1.6; letter-spacing: 0.04em;
-  }
-  .tip-icon { font-size: 0.9rem; flex-shrink: 0; }
-  .tip strong { color: var(--azul-neon); font-weight: 400; }
+    .player-subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--texto-dim);
+      margin-bottom: 2rem;
+      letter-spacing: 0.08em;
+    }
 
-  @media (max-width: 520px) {
-    .player-card { padding: 1.75rem 1.25rem; }
-    .info-grid { grid-template-columns: 1fr; }
-  }
-</style>
+    .player-subtitle span {
+      color: var(--laranja-claro);
+    }
+
+    /* ── IFRAME WRAPPER ── */
+    .iframe-wrap {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 170, 255, 0.2);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(0, 170, 255, 0.05);
+      background: var(--fundo3);
+      /* mascara a UI branca do OneDrive com uma moldura escura */
+      position: relative;
+    }
+
+    /* borda neon animada ao redor do iframe */
+    .iframe-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      padding: 1px;
+      background: linear-gradient(135deg, var(--azul-neon), var(--laranja), var(--azul-neon));
+      background-size: 200% 200%;
+      animation: borderAnim 4s linear infinite;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes borderAnim {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .iframe-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 140px;
+      border: none;
+      /* neutraliza o fundo branco do player OneDrive */
+      filter: none;
+    }
+
+    /* label abaixo do iframe */
+    .iframe-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      margin-bottom: 1.75rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--texto-dim);
+      letter-spacing: 0.1em;
+    }
+
+    .iframe-label .dot-onedrive {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--azul-neon);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.2;
+      }
+    }
+
+    /* ── DIVISOR ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 170, 255, 0.2), transparent);
+      margin: 0 0 1.5rem;
+    }
+
+    /* ── INFO CARDS ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-item {
+      background: var(--fundo3);
+      border: 1px solid rgba(0, 170, 255, 0.08);
+      border-radius: 8px;
+      padding: 0.65rem 0.75rem;
+    }
+
+    .info-item-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      color: var(--texto-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .info-item-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--laranja-claro);
+    }
+
+    /* ── DICA ── */
+    .tip {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      background: rgba(0, 170, 255, 0.05);
+      border: 1px solid rgba(0, 170, 255, 0.12);
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--texto-dim);
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+    }
+
+    .tip-icon {
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .tip strong {
+      color: var(--azul-neon);
+      font-weight: 400;
+    }
+
+    @media (max-width: 520px) {
+      .player-card {
+        padding: 1.75rem 1.25rem;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="player-card">
+  <div class="player-card">
 
-  <!-- barra terminal -->
-  <div class="terminal-bar">
-    <div class="dot dot-r"></div>
-    <div class="dot dot-y"></div>
-    <div class="dot dot-g"></div>
-    <span class="terminal-path">~/revisao/audio $</span>
-  </div>
-
-  <!-- título -->
-  <div class="player-title">Tutores</div>
-  <div class="player-subtitle">Curso Técnico em Informática &nbsp;·&nbsp; <span>Revisão em Áudio</span></div>
-
-  <!-- player OneDrive via iframe -->
-  <div class="iframe-wrap">
-    <iframe
-      src="https://1drv.ms/u/c/348B3F34FE6C332F/IQD0HIAhiguJR793Rri9LMErAV3vcvIaNfPohWaHOLt12Sc?e=6cBh62"
-      scrolling="no"
-      allowfullscreen>
-    </iframe>
-  </div>
-
-  <!-- label status -->
-  <div class="iframe-label">
-    <div class="dot-onedrive"></div>
-    stream via onedrive &nbsp;·&nbsp; use os controles do player acima
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- info -->
-  <div class="info-grid">
-    <div class="info-item">
-      <div class="info-item-label">conteúdo</div>
-      <div class="info-item-value">Inteligência Artificial</div>
+    <!-- barra terminal -->
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="terminal-path">~/revisao/audio $</span>
     </div>
-    <div class="info-item">
-      <div class="info-item-label">formato</div>
-      <div class="info-item-value">M4A / AAC</div>
-    </div>
-    <div class="info-item">
-      <div class="info-item-label">curso</div>
-      <div class="info-item-value">Técnico em Informática</div>
-    </div>
-    <div class="info-item">
-      <div class="info-item-label">tipo</div>
-      <div class="info-item-value">Revisão — Avaliação</div>
-    </div>
-  </div>
 
-  <!-- dica -->
-  <div class="tip">
-    <span class="tip-icon">💡</span>
-    <span>
-      Use <strong>▶ Play</strong> no player acima para ouvir. Para melhor experiência,
-      ajuste a <strong>velocidade</strong> diretamente no controle do OneDrive.
-    </span>
-  </div>
+    <!-- título -->
+    <div class="player-title">Tutores</div>
+    <div class="player-subtitle">Curso Técnico em Informática &nbsp;·&nbsp; <span>Revisão em Áudio</span></div>
 
-</div>
+    <!-- player OneDrive via iframe -->
+    <div class="iframe-wrap">
+      <iframe src="https://1drv.ms/u/c/348B3F34FE6C332F/IQT0HIAhiguJR793Rri9LMErAU0jmmGG7NMVkBwWizG2ums" width="98"
+        height="120" frameborder="0" scrolling="no"></iframe>
+    </div>
+
+    <!-- label status -->
+    <div class="iframe-label">
+      <div class="dot-onedrive"></div>
+      stream via onedrive &nbsp;·&nbsp; use os controles do player acima
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- info -->
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-item-label">conteúdo</div>
+        <div class="info-item-value">Inteligência Artificial</div>
+      </div>
+      <div class="info-item">
+        <div class="info-item-label">formato</div>
+        <div class="info-item-value">M4A / AAC</div>
+      </div>
+      <div class="info-item">
+        <div class="info-item-label">curso</div>
+        <div class="info-item-value">Técnico em Informática</div>
+      </div>
+      <div class="info-item">
+        <div class="info-item-label">tipo</div>
+        <div class="info-item-value">Revisão — Avaliação</div>
+      </div>
+    </div>
+
+    <!-- dica -->
+    <div class="tip">
+      <span class="tip-icon">💡</span>
+      <span>
+        Use <strong>▶ Play</strong> no player acima para ouvir. Para melhor experiência,
+        ajuste a <strong>velocidade</strong> diretamente no controle do OneDrive.
+      </span>
+    </div>
+
+  </div>
 
 </body>
+
 </html>
