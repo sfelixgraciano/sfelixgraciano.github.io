@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação IA</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto:wght@300;400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --azul: #0f172a;
+            --azul2: #1e3a8a;
+            --laranja: #f97316;
+            --verde: #22c55e;
+            --vermelho: #ef4444;
+            --card: #1e293b;
+            --text: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--azul), var(--azul2));
+            color: var(--text);
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: auto;
+            background: #020617;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        h1 {
+            font-family: 'Orbitron';
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .question:hover {
+            transform: scale(1.01);
+        }
+
+        .options li {
+            list-style: none;
+            margin: 8px 0;
+        }
+
+        label {
+            display: block;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        label:hover {
+            background: rgba(249, 115, 22, 0.2);
+        }
+
+        .correct {
+            background: rgba(34, 197, 94, 0.3);
+            border-left: 4px solid var(--verde);
+        }
+
+        .wrong {
+            background: rgba(239, 68, 68, 0.3);
+            border-left: 4px solid var(--vermelho);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: linear-gradient(90deg, var(--laranja), #fb923c);
+            color: white;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        #summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #020617;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        .fade {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-btn {
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #1e3a8a, #0ea5e9);
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="quiz-container">
+        <button onclick="goBack()" class="back-btn">⬅ Voltar</button>
+        <h1>Avaliação: Ecossistema de IA</h1>
+        <div id="questions"></div>
+        <button onclick="calculateResult()">Finalizar</button>
+        <div id="result"></div>
+        <div id="summary"></div>
+    </div>
+
+    <script>
+        const questionsData = [
+            {
+                "q": "Qual é a definição técnica de Inteligência Artificial apresentada nas fontes?",
+                "options": [
+                    "Sistema limitado a cálculos matemáticos pré-programados.",
+                    "Técnicas que simulam e reproduzem capacidades humanas.",
+                    "Uma inteligência biológica transferida para chips digitais.",
+                    "Banco de dados estático sem capacidade de gerar novos dados."
+                ],
+                "correct": 1,
+                "topic": "Fundamentos de IA"
+            },
+            {
+                "q": "Qual destas capacidades humanas a IA busca reproduzir tecnicamente?",
+                "options": [
+                    "Apenas o armazenamento passivo de grandes volumes de dados.",
+                    "Execução de regras manuais definidas por desenvolvedores.",
+                    "Tomada de decisão, criatividade e resolução de problemas.",
+                    "Processamento mecânico de operações sem qualquer inferência."
+                ],
+                "correct": 2,
+                "topic": "Fundamentos de IA"
+            },
+            {
+                "q": "O que caracteriza a IA Fraca (ANI) na realidade tecnológica atual?",
+                "options": [
+                    "Sistemas especializados em tarefas e domínios delimitados.",
+                    "Máquinas com consciência própria e emoções independentes.",
+                    "Sistemas que superam a inteligência humana em todos os campos.",
+                    "Robôs físicos que realizam qualquer tarefa doméstica humana."
+                ],
+                "correct": 0,
+                "topic": "Categorias de IA"
+            },
+            {
+                "q": "Como é definida a IA Forte (AGI) nos materiais estudados?",
+                "options": [
+                    "Tecnologia aplicada hoje em assistentes como Siri e Alexa.",
+                    "Algoritmos de busca simples usados em navegadores de web.",
+                    "Conceito teórico de máquinas com capacidades cognitivas gerais.",
+                    "Softwares de chat que respondem apenas comandos específicos."
+                ],
+                "correct": 2,
+                "topic": "Categorias de IA"
+            },
+            {
+                "q": "Qual é o foco principal do Teste de Turing proposto em 1950?",
+                "options": [
+                    "Verificar se a máquina possui uma alma ou essência biológica.",
+                    "Avaliar a capacidade da máquina de simular comportamento humano.",
+                    "Testar a velocidade de processamento de cálculos matemáticos.",
+                    "Comprovar que a máquina entende o significado real das frases."
+                ],
+                "correct": 1,
+                "topic": "Teste de Turing"
+            },
+            {
+                "q": "O sucesso no Teste de Turing comprova necessariamente o quê?",
+                "options": [
+                    "Que o sistema atingiu o nível de Inteligência Artificial Forte.",
+                    "A existência de consciência e compreensão semântica real.",
+                    "A imitação do comportamento humano em interação textual.",
+                    "Que a máquina consegue realizar tarefas físicas no mundo real."
+                ],
+                "correct": 2,
+                "topic": "Teste de Turing"
+            },
+            {
+                "q": "Como o Machine Learning (ML) altera a programação tradicional?",
+                "options": [
+                    "Exige que o programador crie regras manuais para cada ação.",
+                    "Elimina completamente o uso de estatística no desenvolvimento.",
+                    "Impede que o sistema evolua após sua criação inicial em rede.",
+                    "Permite que o sistema aprenda padrões a partir de dados brutos."
+                ],
+                "correct": 3,
+                "topic": "Machine Learning"
+            },
+            {
+                "q": "Na abordagem tradicional de software, como as decisões são tomadas?",
+                "options": [
+                    "O sistema descobre padrões ocultos sozinho sem intervenção.",
+                    "Através de regras manuais e explícitas criadas pelo dev.",
+                    "Por meio de inferências autônomas baseadas em experiência.",
+                    "Utilizando redes neurais para gerar código de forma automática."
+                ],
+                "correct": 1,
+                "topic": "Machine Learning"
+            },
+            {
+                "q": "O que representa um 'modelo' na engenharia de Inteligência Artificial?",
+                "options": [
+                    "Um hardware dedicado apenas ao armazenamento de Big Data.",
+                    "Artefato treinado que incorpora parâmetros para inferências.",
+                    "Um conjunto de instruções fixas que não aceita novos dados.",
+                    "Documentação técnica que descreve como o código funciona."
+                ],
+                "correct": 1,
+                "topic": "Componentes de IA"
+            },
+            {
+                "q": "Qual é a função do 'dataset' no desenvolvimento de uma IA?",
+                "options": [
+                    "Executar as previsões finais para o usuário de forma direta.",
+                    "Funcionar como o motor de inferência da arquitetura do sistema.",
+                    "Fornecer os exemplos utilizados durante o treino do modelo.",
+                    "Substituir o modelo quando o sistema sofre com alta latência."
+                ],
+                "correct": 2,
+                "topic": "Componentes de IA"
+            },
+            {
+                "q": "O que significa a capacidade de 'generalização' de um modelo?",
+                "options": [
+                    "Memorizar todos os dados apresentados durante o treinamento.",
+                    "Reduzir o tamanho do banco de dados para economizar espaço.",
+                    "Aplicar o conhecimento em dados novos e não vistos antes.",
+                    "Executar tarefas genéricas com baixa precisão e muitos erros."
+                ],
+                "correct": 2,
+                "topic": "Treinamento e Performance"
+            },
+            {
+                "q": "Um modelo que apenas memoriza o dataset de treino falha em quê?",
+                "options": [
+                    "No armazenamento de parâmetros ajustados dentro do núcleo.",
+                    "Na capacidade de generalizar com eficácia para novos casos.",
+                    "Em seguir as regras explícitas definidas pelo programador.",
+                    "No acesso ao repositório colaborativo do hub Hugging Face."
+                ],
+                "correct": 1,
+                "topic": "Treinamento e Performance"
+            },
+            {
+                "q": "Onde se posicionam modelos de grande escala como o Llama 3?",
+                "options": [
+                    "Na camada periférica de interface com o usuário final.",
+                    "No núcleo (Core) da arquitetura de sistemas de IA modernos.",
+                    "Apenas em dispositivos físicos sem conexão com a internet.",
+                    "Na camada de hardware responsável pelo resfriamento local."
+                ],
+                "correct": 1,
+                "topic": "Arquitetura de Sistemas"
+            },
+            {
+                "q": "Por que modelos de núcleo (Core) dependem de Big Data?",
+                "options": [
+                    "Para reduzir a latência durante o motor de inferência diário.",
+                    "Pois modelos pequenos não conseguem rodar no Hugging Face.",
+                    "Para serem criados e treinados com precisão e robustez técnica.",
+                    "Para evitar o uso de parâmetros ajustados em redes neurais."
+                ],
+                "correct": 2,
+                "topic": "Arquitetura de Sistemas"
+            },
+            {
+                "q": "Qual é a função principal de ferramentas como o Ollama?",
+                "options": [
+                    "Servir como repositório de datasets para toda a comunidade.",
+                    "Atuar como motor de inferência intermediando usuário e modelo.",
+                    "Substituir o núcleo do sistema em caso de falhas críticas.",
+                    "Criar as regras manuais que o Machine Learning deve seguir."
+                ],
+                "correct": 1,
+                "topic": "Arquitetura de Sistemas"
+            },
+            {
+                "q": "O que pode causar 'alta latência' em uma aplicação de IA?",
+                "options": [
+                    "O excesso de generalização do modelo em dados desconhecidos.",
+                    "O uso de IA Forte em vez de sistemas de IA Fraca ou ANI.",
+                    "Gargalos de processamento na camada do motor de inferência.",
+                    "A ausência de parâmetros ajustados dentro de um dataset fixo."
+                ],
+                "correct": 2,
+                "topic": "Arquitetura de Sistemas"
+            },
+            {
+                "q": "Qual o papel do Hugging Face no ecossistema de IA?",
+                "options": [
+                    "Funciona como um hub colaborativo para modelos e datasets.",
+                    "É o motor de inferência padrão para rodar o modelo Llama 3.",
+                    "Atua como a consciência artificial nos sistemas de IA Forte.",
+                    "Substitui a necessidade de Big Data no treinamento do Core."
+                ],
+                "correct": 0,
+                "topic": "Ecossistema e Ferramentas"
+            },
+            {
+                "q": "Em relação à infraestrutura, o que limita o aprendizado da IA?",
+                "options": [
+                    "A falta de poder computacional para processar grandes volumes.",
+                    "O uso excessivo de hubs colaborativos como o Hugging Face.",
+                    "A escolha de modelos que utilizam exclusivamente o Llama 3.",
+                    "A presença de muitos parâmetros ajustados no motor de inferência."
+                ],
+                "correct": 0,
+                "topic": "Infraestrutura"
+            },
+            {
+                "q": "O que um dataset com informações tendenciosas pode gerar?",
+                "options": [
+                    "Um aumento na velocidade de resposta do motor de inferência.",
+                    "Modelos com baixa generalização e respostas inconsistentes.",
+                    "A evolução imediata do sistema para o nível de IA Forte (AGI).",
+                    "A eliminação de parâmetros ruidosos durante o treinamento."
+                ],
+                "correct": 1,
+                "topic": "Ética e Qualidade de Dados"
+            },
+            {
+                "q": "Qual tema estuda a responsabilidade sobre os resultados da IA?",
+                "options": [
+                    "Processamento de Linguagem Natural focado em chatbots.",
+                    "Visão Computacional aplicada em diagnósticos por imagem.",
+                    "Ética e Governança de Dados aplicada a setores críticos.",
+                    "Deep Learning focado na criação de redes neurais profundas."
+                ],
+                "correct": 2,
+                "topic": "Ética e Qualidade de Dados"
+            },
+            {
+                "q": "O que as Redes Neurais representam para modelos de grande escala?",
+                "options": [
+                    "Uma forma de programação tradicional baseada em regras fixas.",
+                    "A base tecnológica que permite inferências de alto nível.",
+                    "O repositório físico onde ficam guardados os datasets brutos.",
+                    "Ferramentas de interface que reduzem a latência do usuário."
+                ],
+                "correct": 1,
+                "topic": "Deep Learning"
+            },
+            {
+                "q": "Qual é a mecânica principal que diferencia IA de software comum?",
+                "options": [
+                    "A execução sequencial de comandos lógicos pré-estabelecidos.",
+                    "O uso de bancos de dados relacionais para consultas de texto.",
+                    "A aprendizagem de padrões através de parâmetros ajustados.",
+                    "A necessidade de intervenção humana em todas as previsões."
+                ],
+                "correct": 2,
+                "topic": "Machine Learning"
+            },
+            {
+                "q": "O Processamento de Linguagem Natural (PLN) foca em quê?",
+                "options": [
+                    "Na criação de hardware para processamento de fotos e vídeos.",
+                    "Interpretação e geração da linguagem humana de forma semântica.",
+                    "Apenas na simulação visual de humanos em robôs antropomórficos.",
+                    "No armazenamento de regras gramaticais em tabelas estáticas."
+                ],
+                "correct": 1,
+                "topic": "PLN"
+            },
+            {
+                "q": "Como o PLN melhora a experiência em motores de inferência?",
+                "options": [
+                    "Aumentando a latência para garantir que a resposta seja longa.",
+                    "Removendo a necessidade de Big Data no núcleo do sistema.",
+                    "Processando contextos complexos para maior precisão na resposta.",
+                    "Substituindo modelos como Llama 3 por regras do tipo Se-Então."
+                ],
+                "correct": 2,
+                "topic": "PLN"
+            },
+            {
+                "q": "A Visão Computacional é definida como a simulação de quê?",
+                "options": [
+                    "Da interpretação de dados e percepção visual humana.",
+                    "De conversas textuais que enganam avaliadores humanos.",
+                    "Da escrita criativa de poemas e códigos de programação.",
+                    "Da tomada de decisão baseada apenas em logs de auditoria."
+                ],
+                "correct": 0,
+                "topic": "Visão Computacional"
+            },
+            {
+                "q": "Qual aplicação utiliza conceitos de Visão Computacional?",
+                "options": [
+                    "Chatbots que respondem apenas perguntas sobre clima e hora.",
+                    "Sistemas de reconhecimento facial e veículos autônomos.",
+                    "Planilhas que realizam cálculos de soma e média aritmética.",
+                    "Editores de texto que apenas salvam arquivos em formato PDF."
+                ],
+                "correct": 1,
+                "topic": "Visão Computacional"
+            },
+            {
+                "q": "Por que a IA evolui com a exposição a mais dados?",
+                "options": [
+                    "Porque os programadores escrevem mais regras com o tempo.",
+                    "Devido à melhoria na experiência e ajuste de seus padrões.",
+                    "Pois o hardware se torna mais inteligente ao ler informações.",
+                    "Devido à transformação automática de IA Fraca em IA Forte."
+                ],
+                "correct": 1,
+                "topic": "Machine Learning"
+            },
+            {
+                "q": "O que é um 'hub colaborativo' como o Hugging Face?",
+                "options": [
+                    "Um local para treinar robôs físicos para tarefas domésticas.",
+                    "Um motor que reduz a latência de modelos de Visão Computacional.",
+                    "Plataforma de compartilhamento de modelos e ferramentas de IA.",
+                    "Um sistema operacional que substitui o Windows no servidor."
+                ],
+                "correct": 2,
+                "topic": "Ecossistema e Ferramentas"
+            },
+            {
+                "q": "Se o modelo é a 'cozinha', qual o papel do Ollama?",
+                "options": [
+                    "Ser o cliente que faz o pedido no salão da aplicação final.",
+                    "Ser o garçom/intermediário que leva o pedido e traz o prato.",
+                    "Fornecer os ingredientes brutos que compõem o dataset inicial.",
+                    "Substituir o chef de cozinha quando este comete erros de lógica."
+                ],
+                "correct": 1,
+                "topic": "Arquitetura de Sistemas"
+            },
+            {
+                "q": "Qual fator técnico impacta diretamente a qualidade da IA?",
+                "options": [
+                    "O nome comercial escolhido para o assistente virtual ou chatbot.",
+                    "A integridade e o volume do dataset usado no treinamento.",
+                    "O tamanho físico dos servidores onde o modelo está guardado.",
+                    "A quantidade de usuários que acessam o sistema simultaneamente."
+                ],
+                "correct": 1,
+                "topic": "Treinamento e Performance"
+            },
+            {
+                "q": "O que caracteriza o 'ajuste de parâmetros' em IA?",
+                "options": [
+                    "A digitação manual de valores por desenvolvedores de software.",
+                    "O processo de aprendizado que molda o comportamento do modelo.",
+                    "A configuração de brilho e contraste em sistemas de visão.",
+                    "A exclusão de dados antigos para dar lugar a novos parâmetros."
+                ],
+                "correct": 1,
+                "topic": "Componentes de IA"
+            },
+            {
+                "q": "Qual o perigo do 'sobreajuste' (overfitting) no treinamento?",
+                "options": [
+                    "O modelo se torna capaz de prever o futuro com 100% de acerto.",
+                    "O sistema para de funcionar por excesso de processamento de GPU.",
+                    "A IA decora o treino mas não consegue lidar com dados novos.",
+                    "O motor de inferência passa a responder de forma muito rápida."
+                ],
+                "correct": 2,
+                "topic": "Treinamento e Performance"
+            },
+            {
+                "q": "A governança de dados em IA busca evitar o quê?",
+                "options": [
+                    "A replicação de preconceitos humanos pelas máquinas treinadas.",
+                    "O uso de ferramentas colaborativas como o hub Hugging Face.",
+                    "A criação de modelos que possuam muitos parâmetros ajustados.",
+                    "A redução da latência em sistemas críticos de tomada de decisão."
+                ],
+                "correct": 0,
+                "topic": "Ética e Qualidade de Dados"
+            },
+            {
+                "q": "Sistemas de busca e assistentes virtuais são exemplos de:",
+                "options": [
+                    "Inteligência Artificial Geral (AGI) com consciência plena.",
+                    "Sistemas baseados apenas em programação tradicional rígida.",
+                    "Inteligência Artificial Fraca (ANI) para fins específicos.",
+                    "Redes neurais que não necessitam de treinamento ou datasets."
+                ],
+                "correct": 2,
+                "topic": "Categorias de IA"
+            },
+            {
+                "q": "O Teste de Turing clássico foca em qual tipo de interação?",
+                "options": [
+                    "Interação física entre robôs e seres humanos em laboratórios.",
+                    "Interação textual para verificar a imitação do comportamento.",
+                    "Análise de ondas cerebrais de máquinas durante o processamento.",
+                    "Reconhecimento de padrões em imagens complexas de satélite."
+                ],
+                "correct": 1,
+                "topic": "Teste de Turing"
+            },
+            {
+                "q": "Qual componente encapsula a lógica aprendida pelo sistema?",
+                "options": [
+                    "O Dataset.",
+                    "O Modelo.",
+                    "O Hardware.",
+                    "O Usuário."
+                ],
+                "correct": 1,
+                "topic": "Componentes de IA"
+            },
+            {
+                "q": "O que sugere uma melhoria técnica para falhas de resposta?",
+                "options": [
+                    "Diminuir o volume de Big Data usado no núcleo do sistema.",
+                    "Implementar monitoramento de performance e logs de sistema.",
+                    "Remover a camada de motor de inferência da arquitetura final.",
+                    "Mudar de IA Fraca para IA Forte para garantir a consciência."
+                ],
+                "correct": 1,
+                "topic": "Arquitetura de Sistemas"
+            },
+            {
+                "q": "Deep Learning utiliza quais estruturas para o aprendizado?",
+                "options": [
+                    "Tabelas de decisão simples com regras do tipo Verdadeiro/Falso.",
+                    "Redes Neurais que demandam grandes volumes de dados (Big Data).",
+                    "Sistemas de armazenamento sem qualquer capacidade de inferência.",
+                    "Motores de busca que não incorporam parâmetros ajustados."
+                ],
+                "correct": 1,
+                "topic": "Deep Learning"
+            },
+            {
+                "q": "A 'autonomia' mencionada na definição de IA refere-se a:",
+                "options": [
+                    "Capacidade de operar sem energia elétrica por longos períodos.",
+                    "Capacidade de tomar decisões sem regras manuais explícitas.",
+                    "Liberdade de a máquina ignorar as leis da física e da lógica.",
+                    "Acesso irrestrito a todos os modelos do repositório Hugging Face."
+                ],
+                "correct": 1,
+                "topic": "Fundamentos de IA"
+            },
+            {
+                "q": "O que diferencia a IA de uma automação simples?",
+                "options": [
+                    "A capacidade de inferência e geração de novos resultados.",
+                    "O fato de ser executada apenas em computadores muito caros.",
+                    "A ausência total de códigos de programação em seu núcleo.",
+                    "O uso obrigatório de robôs físicos para qualquer tipo de tarefa."
+                ],
+                "correct": 0,
+                "topic": "Fundamentos de IA"
+            },
+            {
+                "q": "Qual o benefício da escalabilidade da infraestrutura em IA?",
+                "options": [
+                    "Garantir recursos de hardware (GPUs) para carga de requisições.",
+                    "Substituir o dataset de treino por um modelo pré-configurado.",
+                    "Eliminar a necessidade de ética e governança no uso de dados.",
+                    "Permitir que a IA Fraca se torne consciente de forma automática."
+                ],
+                "correct": 0,
+                "topic": "Infraestrutura"
+            },
+            {
+                "q": "Um modelo 'bem treinado' deve ser capaz de:",
+                "options": [
+                    "Responder apenas perguntas contidas no dataset original.",
+                    "Lidar com novos dados mantendo uma boa performance técnica.",
+                    "Substituir o motor de inferência Ollama em todas as tarefas.",
+                    "Funcionar sem parâmetros ajustados ou redes neurais profundas."
+                ],
+                "correct": 1,
+                "topic": "Treinamento e Performance"
+            },
+            {
+                "q": "No ecossistema de IA, quem fornece modelos prontos?",
+                "options": [
+                    "Apenas o motor de inferência local de cada usuário final.",
+                    "Hubs colaborativos e repositórios como o Hugging Face.",
+                    "O Teste de Turing através de seus avaliadores humanos.",
+                    "Regras manuais explícitas criadas na programação tradicional."
+                ],
+                "correct": 1,
+                "topic": "Ecossistema e Ferramentas"
+            },
+            {
+                "q": "A IA que resolve problemas médicos por imagem foca em:",
+                "options": [
+                    "Processamento de Linguagem Natural e análise de textos.",
+                    "Visão Computacional e interpretação de dados visuais.",
+                    "IA Forte com consciência para sentir a dor dos pacientes.",
+                    "Sistemas tradicionais baseados em regras de Se-Então fixas."
+                ],
+                "correct": 1,
+                "topic": "Visão Computacional"
+            },
+            {
+                "q": "O que o termo 'Core' representa no diagrama de IA?",
+                "options": [
+                    "O centro do sistema onde reside o modelo e sua lógica.",
+                    "A interface colorida que o usuário vê na tela do celular.",
+                    "O cabo de rede que conecta o servidor à internet mundial.",
+                    "O manual de instruções que ensina humanos a usar a IA."
+                ],
+                "correct": 0,
+                "topic": "Arquitetura de Sistemas"
+            },
+            {
+                "q": "O ajuste de parâmetros ocorre em qual fase do ciclo de IA?",
+                "options": [
+                    "Durante o treinamento do modelo utilizando o dataset.",
+                    "No momento em que o usuário digita uma pergunta no chat.",
+                    "Somente após a máquina ser desligada para manutenção física.",
+                    "Na fase de criação de regras manuais da programação comum."
+                ],
+                "correct": 0,
+                "topic": "Componentes de IA"
+            },
+            {
+                "q": "Sistemas que reconhecem voz e traduzem textos usam:",
+                "options": [
+                    "Apenas regras matemáticas sem capacidade de aprendizado.",
+                    "Técnicas de PLN para processar a linguagem humana.",
+                    "Consciência artificial plena para entender sentimentos.",
+                    "Hardwares que dispensam o uso de modelos ou datasets."
+                ],
+                "correct": 1,
+                "topic": "PLN"
+            },
+            {
+                "q": "A qualidade das respostas de uma IA depende de:",
+                "options": [
+                    "Treinamento otimizado e dados de alta integridade.",
+                    "Número de cores presentes na logo da empresa criadora.",
+                    "Velocidade de digitação do usuário que faz a pergunta.",
+                    "Troca constante do modelo Llama 3 por modelos de visão."
+                ],
+                "correct": 0,
+                "topic": "Treinamento e Performance"
+            },
+            {
+                "q": "O termo ANI (Artificial Narrow Intelligence) refere-se a:",
+                "options": [
+                    "IA que possui inteligência geral superior à dos humanos.",
+                    "IA especializada em tarefas específicas (IA Fraca).",
+                    "Máquinas que conseguem pensar e sentir como seres vivos.",
+                    "Sistemas que não utilizam Machine Learning para aprender."
+                ],
+                "correct": 1,
+                "topic": "Categorias de IA"
+            },
+            {
+                "q": "Qual o objetivo de otimizar chamadas entre usuário e motor?",
+                "options": [
+                    "Aumentar a latência para processar melhor os dados brutos.",
+                    "Reduzir o tempo de viagem dos dados e acelerar a resposta.",
+                    "Eliminar a necessidade de parâmetros ajustados no núcleo.",
+                    "Permitir que o Hugging Face controle o hardware do usuário."
+                ],
+                "correct": 1,
+                "topic": "Arquitetura de Sistemas"
+            }
+        ];
+
+        const container = document.getElementById('questions');
+
+        questionsData.forEach((q, i) => {
+            const div = document.createElement('div');
+            div.className = 'question fade';
+            div.innerHTML = `<p><b>${i + 1}. ${q.q}</b></p>`;
+
+            q.options.forEach((opt, j) => {
+                div.innerHTML += `
+        <label>
+            <input type="radio" name="q${i}" value="${j}">
+            ${opt}
+        </label>`;
+            });
+
+            container.appendChild(div);
+        });
+
+        document.addEventListener('change', e => {
+            if (e.target.type === "radio") {
+                const labels = e.target.closest('.question').querySelectorAll('label');
+                labels.forEach(l => l.style.background = "");
+                e.target.parentElement.style.background = "rgba(249,115,22,0.3)";
+            }
+        });
+
+        function calculateResult() {
+            let score = 0;
+            let topicStats = {};
+
+            document.querySelectorAll('.question').forEach((div, i) => {
+                const q = questionsData[i];
+                const selected = div.querySelector('input:checked');
+
+                if (!topicStats[q.topic]) topicStats[q.topic] = { correct: 0, total: 0 };
+                topicStats[q.topic].total++;
+
+                if (selected) {
+                    if (parseInt(selected.value) === q.correct) {
+                        score++;
+                        topicStats[q.topic].correct++;
+                        selected.parentElement.classList.add('correct');
+                    } else {
+                        selected.parentElement.classList.add('wrong');
+                        div.querySelectorAll('input')[q.correct].parentElement.classList.add('correct');
+                    }
+                }
+            });
+
+            document.getElementById('result').innerHTML = `Você acertou ${score}/${questionsData.length}`;
+
+            generateSummary(topicStats);
+        }
+
+        function generateSummary(stats) {
+            let summary = "<h3>Resumo de estudo</h3>";
+
+            let sorted = Object.entries(stats).sort((a, b) => {
+                return (a[1].correct / a[1].total) - (b[1].correct / b[1].total);
+            });
+
+            summary += "<p><b>Pontos a reforçar:</b></p><ul>";
+            sorted.slice(0, 3).forEach(([topic, data]) => {
+                summary += `<li>${topic}</li>`;
+            });
+            summary += "</ul>";
+
+            summary += "<p><b>Pontos fortes:</b></p><ul>";
+            sorted.slice(-3).forEach(([topic, data]) => {
+                summary += `<li>${topic}</li>`;
+            });
+            summary += "</ul>";
+
+            document.getElementById('summary').innerHTML = summary;
+            document.getElementById('summary').style.display = "block";
+        }
+
+        function goBack() {
+            window.location.href = "ia.html";
+        }
+    </script>
+
+</body>
+
+</html>
